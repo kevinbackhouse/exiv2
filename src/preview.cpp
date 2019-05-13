@@ -422,12 +422,13 @@ namespace {
         nativePreview_ = image.nativePreviews()[parIdx];
         width_ = nativePreview_.width_;
         height_ = nativePreview_.height_;
-        valid_ = true;
         if (nativePreview_.filter_ == "") {
             size_ = nativePreview_.size_;
         } else {
             size_ = getData().size_;
         }
+        if (size_ > static_cast<uint32_t>(image_.io().size())) return;
+        valid_ = true;
     }
 
     Loader::AutoPtr createLoaderNative(PreviewId id, const Image &image, int parIdx)
@@ -528,13 +529,25 @@ namespace {
         const ExifData &exifData = image_.exifData();
         ExifData::const_iterator pos = exifData.findKey(ExifKey(param_[parIdx].offsetKey_));
         if (pos != exifData.end() && pos->count() > 0) {
-            offset_ = pos->toLong();
+            long off = pos->toLong();
+            enforce(off >= 0, kerCorruptedMetadata);
+#if LONG_MAX > UINT_MAX
+            enforce(off <= static_cast<long>(std::numeric_limits<uint32_t>::max()),
+                    kerCorruptedMetadata);
+#endif
+            offset_ = static_cast<uint32_t>(off);
         }
 
         size_ = 0;
         pos = exifData.findKey(ExifKey(param_[parIdx].sizeKey_));
         if (pos != exifData.end() && pos->count() > 0) {
-            size_ = pos->toLong();
+            long sz = pos->toLong();
+            enforce(sz >= 0, kerCorruptedMetadata);
+#if LONG_MAX > UINT_MAX
+            enforce(sz <= static_cast<long>(std::numeric_limits<uint32_t>::max()),
+                    kerCorruptedMetadata);
+#endif
+            size_ = sz;
         }
 
         if (offset_ == 0 || size_ == 0) return;
@@ -542,7 +555,13 @@ namespace {
         if (param_[parIdx].baseOffsetKey_) {
             pos = exifData.findKey(ExifKey(param_[parIdx].baseOffsetKey_));
             if (pos != exifData.end() && pos->count() > 0) {
-                offset_ += pos->toLong();
+                long off = pos->toLong();
+                enforce(off >= 0, kerCorruptedMetadata);
+#if LONG_MAX > UINT_MAX
+                enforce(off <= static_cast<long>(std::numeric_limits<uint32_t>::max()),
+                        kerCorruptedMetadata);
+#endif
+                offset_ = Safe::add(offset_, static_cast<uint32_t>(off));
             }
         }
 
@@ -626,6 +645,7 @@ namespace {
         }
 
         if (size_ == 0) return;
+        if (size_ > static_cast<uint32_t>(image_.io().size())) return;
 
         valid_ = true;
     }
@@ -722,10 +742,17 @@ namespace {
         if (pos == exifData.end()) return;
         if (offsetCount != pos->value().count()) return;
         for (int i = 0; i < offsetCount; i++) {
-            size_ += pos->toLong(i);
+            long sz = pos->toLong();
+            enforce(sz >= 0, kerCorruptedMetadata);
+#if LONG_MAX > UINT_MAX
+            enforce(sz <= static_cast<long>(std::numeric_limits<uint32_t>::max()),
+                    kerCorruptedMetadata);
+#endif
+            size_ = Safe::add(size_, static_cast<uint32_t>(sz));
         }
 
         if (size_ == 0) return;
+        if (size_ > static_cast<uint32_t>(image_.io().size())) return;
 
         pos = exifData.findKey(ExifKey(std::string("Exif.") + group_ + ".ImageWidth"));
         if (pos != exifData.end() && pos->count() > 0) {
@@ -861,6 +888,7 @@ namespace {
         height_ = heightDatum->toLong();
         preview_ = decodeBase64(imageDatum->toString());
         size_ = static_cast<uint32_t>(preview_.size_);
+        if (size_ > static_cast<uint32_t>(image_.io().size())) return;
         valid_ = true;
     }
 
