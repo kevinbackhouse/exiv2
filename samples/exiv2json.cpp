@@ -74,7 +74,7 @@ bool getToken(std::string& in, Token& token, std::set<std::string>* pNS = nullpt
 
     while ( !result && in.length() ) {
         std::string c = in.substr(0,1);
-        char        C = c[0];
+        char        C = c.at(0);
         in            = in.substr(1,std::string::npos);
         if ( in.length() == 0 && C != ']' ) token.n += c;
         if ( C == '/' || C == '[' || C == ':' || C == '.' || C == ']' || in.length() == 0 ) {
@@ -128,10 +128,10 @@ Jzon::Node& objectForKey(const std::string& Key, Jzon::Object& root, std::string
     std::string input  = Key ; // Example: "XMP.xmp.MP.RegionInfo/MPRI:Regions[1]/MPReg:Rectangle"
     while ( getToken(input,token,pNS) ) tokens.push_back(token);
     size_t      l      = tokens.size()-1; // leave leaf name to push()
-    name               = tokens[l].n ;
+    name               = tokens.at(l).n ;
 
     // The second token.  For example: XMP.dc is a namespace
-    if ( pNS && tokens.size() > 1 ) pNS->insert(tokens[1].n);
+    if ( pNS && tokens.size() > 1 ) pNS->insert(tokens.at(1).n);
     return recursivelyBuildTree(root,tokens,l-1);
 
 #if 0

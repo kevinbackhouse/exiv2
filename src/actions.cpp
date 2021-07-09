@@ -720,7 +720,7 @@ namespace Action {
             return 1;
         }
         std::string v = md->toString();
-        if (v.length() == 0 || v[0] == ' ') {
+        if (v.length() == 0 || v.at(0) == ' ') {
             std::cerr << _("Image file creation timestamp not set in the file")
                       << " " << path << "\n";
             return 1;
@@ -998,7 +998,7 @@ namespace Action {
             if (number == 0) {
                 // Write all previews
                 for (int num = 0; num < static_cast<int>(pvList.size()); ++num) {
-                    writePreviewFile(pvMgr.getPreviewImage(pvList[num]), num + 1);
+                    writePreviewFile(pvMgr.getPreviewImage(pvList.at(num)), num + 1);
                 }
                 break;
             }
@@ -1006,7 +1006,7 @@ namespace Action {
                 std::cerr << path_ << ": " << _("Image does not have preview") << " " << number << "\n";
                 continue;
             }
-            writePreviewFile(pvMgr.getPreviewImage(pvList[number - 1]), number);
+            writePreviewFile(pvMgr.getPreviewImage(pvList.at(number - 1)), number);
         }
         return 0;
     } // Extract::writePreviews
@@ -1550,7 +1550,7 @@ namespace Action {
             return 0;
         }
         std::string timeStr = md->toString();
-        if (timeStr.empty() || timeStr[0] == ' ') {
+        if (timeStr.empty() || timeStr.at(0) == ' ') {
             std::cerr << path << ": " << _("Timestamp of metadatum with key") << " `"
                       << ek << "' " << _("not set\n");
             return 1;
@@ -2070,7 +2070,7 @@ namespace {
                               << "' " << _("exists. [O]verwrite, [r]ename or [s]kip?")
                               << " ";
                     std::cin >> s;
-                    switch (s[0]) {
+                    switch (s.at(0)) {
                     case 'o':
                     case 'O':
                         go = false;
@@ -2135,7 +2135,7 @@ namespace {
                       << ": " << _("Overwrite") << " `" << path << "'? ";
             std::string s;
             std::cin >> s;
-            if (s[0] != 'y' && s[0] != 'Y') return 1;
+            if (s.at(0) != 'y' && s.at(0) != 'Y') return 1;
         }
         return 0;
     }
