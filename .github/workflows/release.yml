@@ -160,7 +160,7 @@ jobs:
         uses: egor-tensin/setup-cygwin@v3
         with:
           platform: x64
-          packages: make gcc gcc-g++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree gettext
+          packages: make gcc gcc-g++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree gettext libintl8
 
       - name: Build packaged release
         run: |
@@ -193,7 +193,7 @@ jobs:
         uses: egor-tensin/setup-cygwin@v3
 
       - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
+        uses: egor-tensin/setup-mingw
         with:
           platform: x64
           cygwin: 1
