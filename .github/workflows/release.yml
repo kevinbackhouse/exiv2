@@ -164,6 +164,7 @@ jobs:
 
       - name: Build packaged release
         run: |
+          cd $GITHUB_WORKSPACE
           pwd
           ls
           env
