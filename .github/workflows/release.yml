@@ -160,7 +160,7 @@ jobs:
         uses: egor-tensin/setup-cygwin@v3
         with:
           platform: x64
-          packages: make gcc gcc-c++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree
+          packages: make gcc g++ gcc-c++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree
 
       - name: Build packaged release
         run: |
@@ -169,6 +169,7 @@ jobs:
           ls
           env
           echo kevwozere
+          python -m pip install --upgrade pip
           mkdir build && cd build
           cmake -G 'Unix Makefiles' -DEXIV2_TEAM_PACKAGING=ON -DBUILD_SHARED_LIBS=ON -DEXIV2_ENABLE_WEBREADY=OFF -DEXIV2_ENABLE_NLS=ON -DCMAKE_BUILD_TYPE=Release -DEXIV2_ENABLE_BMFF=ON -DEXIV2_TEAM_WARNINGS_AS_ERRORS=ON -DEXIV2_BUILD_DOC=ON -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" ..
           cmake --build . -t doc
@@ -188,6 +189,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install Cygwin
+        uses: egor-tensin/setup-cygwin@v3
 
       - name: Set up MinGW
         uses: egor-tensin/setup-mingw@v2
