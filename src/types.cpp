@@ -129,21 +129,24 @@ namespace Exiv2 {
     }
 
     DataBuf::~DataBuf()
-    { delete[] pData_; }
-
-    DataBuf::DataBuf() : pData_(nullptr), size_(0)
-    {}
-
-    DataBuf::DataBuf(long size) : pData_(new byte[size]()), size_(size)
-    {}
-
-    DataBuf::DataBuf(const byte* pData, long size) : pData_(nullptr), size_(0)
     {
-        if (size > 0) {
-            pData_ = new byte[size];
-            std::memcpy(pData_, pData, size);
-            size_ = size;
+        std::free(pData_);
+    }
+
+    DataBuf::DataBuf(long size)
+        : pData_(static_cast<byte*>(std::malloc(size))), size_(size)
+    {
+        if (!pData_) {
+            throw std::bad_alloc();
         }
+    }
+
+    DataBuf::DataBuf() : DataBuf(0)
+    {}
+
+    DataBuf::DataBuf(const byte* pData, long size) : DataBuf(size)
+    {
+        std::memcpy(pData_, pData, size);
     }
 
     DataBuf& DataBuf::operator=(DataBuf& rhs)
@@ -156,26 +159,31 @@ namespace Exiv2 {
     void DataBuf::alloc(long size)
     {
         if (size > size_) {
-            delete[] pData_;
-            pData_ = nullptr;
-            size_ = 0;
-            pData_ = new byte[size];
+            byte* p = static_cast<byte*>(std::realloc(pData_, size));
+            if (!p) {
+                throw std::bad_alloc();
+            }
+            pData_ = p;
             size_ = size;
         }
     }
 
     EXV_WARN_UNUSED_RESULT std::pair<byte*, long> DataBuf::release()
     {
+        byte* emptyBuf = static_cast<byte*>(std::malloc(0));
+        if (!emptyBuf) {
+            throw std::bad_alloc();
+        }
         std::pair<byte*, long> p = std::make_pair(pData_, size_);
-        pData_ = nullptr;
         size_ = 0;
+        pData_ = emptyBuf;
         return p;
     }
 
     void DataBuf::reset(std::pair<byte*, long> p)
     {
         if (pData_ != p.first) {
-            delete[] pData_;
+            std::free(pData_);
             pData_ = p.first;
         }
         size_ = p.second;
