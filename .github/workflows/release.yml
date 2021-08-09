@@ -160,7 +160,7 @@ jobs:
         uses: egor-tensin/setup-cygwin@v3
         with:
           platform: x64
-          packages: make gcc g++ gcc-c++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree
+          packages: make gcc gcc-g++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree
 
       - name: Build packaged release
         run: |
@@ -197,6 +197,8 @@ jobs:
         uses: egor-tensin/setup-mingw@v2
         with:
           platform: x64
+          cygwin: 1
+          cc: 1
 
       - name: pwd
         run: |
