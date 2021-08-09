@@ -226,8 +226,24 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  MinGW2:
+    name: 'Build MinGW2 Release'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install msys2
+        run: |
+          choco install msys2
+
+      - name: Update msys2
+        run: |
+          pacman -SySu
+          pacman -Su
+          pacman -Ss mingw
+
   publish:
-    needs: [Linux, macOS, Windows, cygwin, MinGW]
+    needs: [Linux, macOS, Windows, cygwin, MinGW, MinGW2]
     runs-on: ubuntu-20.04
     permissions:
       contents: write
