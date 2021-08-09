@@ -145,6 +145,33 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  cygwin:
+    name: 'Build macOS Release'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Cygwin
+        uses: egor-tensin/setup-cygwin@v3
+          with:
+            platform: x64
+            packages: cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2
+
+      - name: Build packaged release
+        run: |
+          mkdir build && cd build
+          cmake -G 'Unix Makefiles' -DEXIV2_TEAM_PACKAGING=ON -DBUILD_SHARED_LIBS=ON -DEXIV2_ENABLE_WEBREADY=OFF -DEXIV2_ENABLE_NLS=ON -DCMAKE_BUILD_TYPE=Release -DEXIV2_ENABLE_BMFF=ON -DEXIV2_TEAM_WARNINGS_AS_ERRORS=ON -DEXIV2_BUILD_DOC=ON -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" ..
+          cmake --build . -t doc
+          cmake --build . -t package
+          tree -L 3
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: exiv2-cygwin
+          path: ./build/exiv2-*.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
   publish:
     needs: [Linux, macOS, Windows]
     runs-on: ubuntu-20.04
