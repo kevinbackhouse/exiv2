@@ -155,7 +155,7 @@ jobs:
         uses: egor-tensin/setup-cygwin@v3
         with:
           platform: x64
-          packages: cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2
+          packages: make gcc gcc-c++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2
 
       - name: Build packaged release
         run: |
@@ -173,7 +173,7 @@ jobs:
           retention-days: 1
 
   publish:
-    needs: [Linux, macOS, Windows]
+    needs: [Linux, macOS, Windows, cygwin]
     runs-on: ubuntu-20.04
     permissions:
       contents: write
