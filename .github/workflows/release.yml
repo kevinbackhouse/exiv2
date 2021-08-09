@@ -175,8 +175,40 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  MinGW:
+    name: 'Build MinGW Release'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+
+      - name: Build packaged release
+        run: |
+          pwd
+          ls
+          python -m pip install --upgrade pip
+          pip3 install lxml
+          pacman -Sy base-devel git coreutils dos2unix tar diffutils make mingw-w64-x86_64-toolchain mingw-w64-x86_64-gcc mingw-w64-x86_64-gdb mingw-w64-x86_64-cmake mingw-w64-x86_64-gettext mingw-w64-x86_64-python3 mingw-w64-x86_64-libexpat  mingw-w64-x86_64-libiconv mingw-w64-x86_64-zlib mingw-w64-x86_64-gtes
+          mkdir build && cd build
+          cmake -G 'Unix Makefiles' -DEXIV2_TEAM_PACKAGING=ON -DBUILD_SHARED_LIBS=ON -DEXIV2_ENABLE_WEBREADY=OFF -DEXIV2_ENABLE_NLS=ON -DCMAKE_BUILD_TYPE=Release -DEXIV2_ENABLE_BMFF=ON -DEXIV2_TEAM_WARNINGS_AS_ERRORS=ON -DEXIV2_BUILD_DOC=ON -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" ..
+          cmake --build . -t doc
+          cmake --build . -t package
+          tree -L 3
+        shell: C:\msys64\usr\bin\bash
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: exiv2-cygwin
+          path: ./build/exiv2-*.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
   publish:
-    needs: [Linux, macOS, Windows, cygwin]
+    needs: [Linux, macOS, Windows, cygwin, MinGW]
     runs-on: ubuntu-20.04
     permissions:
       contents: write
