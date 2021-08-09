@@ -160,7 +160,7 @@ jobs:
         uses: egor-tensin/setup-cygwin@v3
         with:
           platform: x64
-          packages: make gcc gcc-g++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree gettext libintl8
+          packages: make gcc gcc-g++ cmake zlib-devel libexpat-devel libxml2-devel libxslt-devel python38 python38-pip python38-libxml2 doxygen graphviz tree gettext gettext-devel
 
       - name: Build packaged release
         run: |
