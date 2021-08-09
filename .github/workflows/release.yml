@@ -146,7 +146,7 @@ jobs:
           retention-days: 1
 
   cygwin:
-    name: 'Build macOS Release'
+    name: 'Build cygwin Release'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
