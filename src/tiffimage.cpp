@@ -134,7 +134,7 @@ namespace Exiv2 {
         return primaryGroup_;
     }
 
-    int TiffImage::pixelWidth() const
+    int64_t TiffImage::pixelWidth() const
     {
         if (pixelWidthPrimary_ != 0) {
             return pixelWidthPrimary_;
@@ -148,7 +148,7 @@ namespace Exiv2 {
         return pixelWidthPrimary_;
     }
 
-    int TiffImage::pixelHeight() const
+    int64_t TiffImage::pixelHeight() const
     {
         if (pixelHeightPrimary_ != 0) {
             return pixelHeightPrimary_;

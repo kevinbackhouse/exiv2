@@ -51,7 +51,7 @@ namespace Exiv2 {
         return "image/x-panasonic-rw2";
     }
 
-    int Rw2Image::pixelWidth() const
+    int64_t Rw2Image::pixelWidth() const
     {
         auto imageWidth =
             exifData_.findKey(Exiv2::ExifKey("Exif.PanasonicRaw.SensorWidth"));
@@ -61,7 +61,7 @@ namespace Exiv2 {
         return 0;
     }
 
-    int Rw2Image::pixelHeight() const
+    int64_t Rw2Image::pixelHeight() const
     {
         auto imageHeight =
             exifData_.findKey(Exiv2::ExifKey("Exif.PanasonicRaw.SensorHeight"));

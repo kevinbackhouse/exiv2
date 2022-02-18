@@ -56,7 +56,7 @@ namespace Exiv2 {
         return "image/x-canon-cr2";
     }
 
-    int Cr2Image::pixelWidth() const
+    int64_t Cr2Image::pixelWidth() const
     {
         auto imageWidth = exifData_.findKey(Exiv2::ExifKey("Exif.Photo.PixelXDimension"));
         if (imageWidth != exifData_.end() && imageWidth->count() > 0) {
@@ -65,7 +65,7 @@ namespace Exiv2 {
         return 0;
     }
 
-    int Cr2Image::pixelHeight() const
+    int64_t Cr2Image::pixelHeight() const
     {
         auto imageHeight = exifData_.findKey(Exiv2::ExifKey("Exif.Photo.PixelYDimension"));
         if (imageHeight != exifData_.end() && imageHeight->count() > 0) {

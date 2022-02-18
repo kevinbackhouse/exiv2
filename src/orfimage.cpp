@@ -54,7 +54,7 @@ namespace Exiv2 {
         return "image/x-olympus-orf";
     }
 
-    int OrfImage::pixelWidth() const
+    int64_t OrfImage::pixelWidth() const
     {
         auto imageWidth = exifData_.findKey(Exiv2::ExifKey("Exif.Image.ImageWidth"));
         if (imageWidth != exifData_.end() && imageWidth->count() > 0) {
@@ -63,7 +63,7 @@ namespace Exiv2 {
         return 0;
     }
 
-    int OrfImage::pixelHeight() const
+    int64_t OrfImage::pixelHeight() const
     {
         auto imageHeight = exifData_.findKey(Exiv2::ExifKey("Exif.Image.ImageLength"));
         if (imageHeight != exifData_.end() && imageHeight->count() > 0) {

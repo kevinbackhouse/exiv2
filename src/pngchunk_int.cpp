@@ -65,7 +65,7 @@ namespace Exiv2
 {
     namespace Internal
     {
-        void PngChunk::decodeIHDRChunk(const DataBuf& data, int* outWidth, int* outHeight)
+        void PngChunk::decodeIHDRChunk(const DataBuf& data, int64_t* outWidth, int64_t* outHeight)
         {
             assert(data.size() >= 8);
 

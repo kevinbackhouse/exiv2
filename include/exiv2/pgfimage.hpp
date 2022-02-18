@@ -96,7 +96,7 @@ namespace Exiv2
         //! Read PGF Header size encoded in 32 bits integer.
         uint32_t readPgfHeaderSize(BasicIo& iIo) const;
         //! Read header structure.
-        DataBuf readPgfHeaderStructure(BasicIo& iIo, int& width, int& height) const;
+        DataBuf readPgfHeaderStructure(BasicIo& iIo, int64_t& width, int64_t& height) const;
         //@}
 
     }; // class PgfImage

@@ -68,8 +68,8 @@ namespace Exiv2 {
           @param outHeight Integer pointer to be set to the height of the image.
         */
         static void decodeIHDRChunk(const DataBuf& data,
-                                    int*           outWidth,
-                                    int*           outHeight);
+                                    int64_t*       outWidth,
+                                    int64_t*       outHeight);
 
         /*!
           @brief Decode PNG tEXt, zTXt, or iTXt chunk data from \em pImage passed by data buffer

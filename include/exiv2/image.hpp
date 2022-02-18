@@ -381,11 +381,11 @@ namespace Exiv2 {
         /*!
           @brief Return the pixel width of the image.
          */
-        virtual int pixelWidth() const;
+        virtual int64_t pixelWidth() const;
         /*!
           @brief Return the pixel height of the image.
          */
-        virtual int pixelHeight() const;
+        virtual int64_t pixelHeight() const;
         /*!
           @brief Returns an ExifData instance containing currently buffered
               Exif data.
@@ -490,8 +490,8 @@ namespace Exiv2 {
         DataBuf           iccProfile_;        //!< ICC buffer (binary data)
         std::string       comment_;           //!< User comment
         std::string       xmpPacket_;         //!< XMP packet
-        int               pixelWidth_;        //!< image pixel width
-        int               pixelHeight_;       //!< image pixel height
+        int64_t           pixelWidth_;        //!< image pixel width
+        int64_t           pixelHeight_;       //!< image pixel height
         NativePreviewList nativePreviews_;    //!< list of native previews
 
         //! Return tag name for given tag id.

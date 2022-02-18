@@ -93,8 +93,8 @@ namespace Exiv2 {
         //! @name Accessors
         //@{
         std::string mimeType() const override;
-        int pixelWidth() const override;
-        int pixelHeight() const override;
+        int64_t pixelWidth() const override;
+        int64_t pixelHeight() const override;
         //@}
 
         //! @name NOT implemented

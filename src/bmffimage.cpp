@@ -157,7 +157,7 @@ namespace Exiv2
         }
     }
 
-    int BmffImage::pixelWidth() const
+    int64_t BmffImage::pixelWidth() const
     {
         auto imageWidth = exifData_.findKey(Exiv2::ExifKey("Exif.Photo.PixelXDimension"));
         if (imageWidth != exifData_.end() && imageWidth->count() > 0) {
@@ -166,7 +166,7 @@ namespace Exiv2
         return pixelWidth_;
     }
 
-    int BmffImage::pixelHeight() const
+    int64_t BmffImage::pixelHeight() const
     {
         auto imageHeight = exifData_.findKey(Exiv2::ExifKey("Exif.Photo.PixelYDimension"));
         if (imageHeight != exifData_.end() && imageHeight->count() > 0) {
