@@ -74,7 +74,7 @@ BmffImage::BmffImage(BasicIo::UniquePtr io, bool /* create */) :
     Image(ImageType::bmff, mdExif | mdIptc | mdXmp, std::move(io)) {
 }  // BmffImage::BmffImage
 
-std::string BmffImage::toAscii(long n) {
+std::string BmffImage::toAscii(uint32_t n) {
   const auto p = reinterpret_cast<const char*>(&n);
   std::string result;
   for (int i = 0; i < 4; i++) {

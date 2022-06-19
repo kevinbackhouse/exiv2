@@ -140,7 +140,7 @@ class EXIV2API BmffImage : public Image {
   /*!
     @brief box utilities
    */
-  static std::string toAscii(long n);
+  static std::string toAscii(uint32_t n);
   std::string boxName(uint32_t box);
   static bool superBox(uint32_t box);
   static bool fullBox(uint32_t box);
