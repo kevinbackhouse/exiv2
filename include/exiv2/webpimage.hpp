@@ -63,6 +63,10 @@ class EXIV2API WebPImage : public Image {
 
  private:
   void doWriteMetadata(BasicIo& outIo);
+
+  //! Finds the offset of header in data. Returns std::string::npos if the header isn't found.
+  static size_t getHeaderOffset(const byte* data, size_t data_size, const byte* header, size_t header_size);
+
   static bool equalsWebPTag(Exiv2::DataBuf& buf, const char* str);
   void debugPrintHex(byte* data, size_t size);
   void decodeChunks(uint32_t filesize);

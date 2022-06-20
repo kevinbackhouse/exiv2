@@ -604,23 +604,23 @@ void WebPImage::decodeChunks(uint32_t filesize) {
       bool s_header = false;
       bool le_header = false;
       bool be_header = false;
-      const byte* pHeader = reinterpret_cast<const byte*>(memmem(payload.c_data(), payload.size(), &exifLongHeader, 4));
+      size_t pos = getHeaderOffset(payload.c_data(), payload.size(), reinterpret_cast<byte*>(&exifLongHeader), 4);
 
-      if (!pHeader) {
-        pHeader = reinterpret_cast<const byte*>(memmem(payload.c_data(), payload.size(), &exifLongHeader, 6));
-        if (pHeader) {
+      if (pos == std::string::npos) {
+        pos = getHeaderOffset(payload.c_data(), payload.size(), reinterpret_cast<byte*>(&exifLongHeader), 6);
+        if (pos != std::string::npos) {
           s_header = true;
         }
       }
-      if (!pHeader) {
-        pHeader = reinterpret_cast<const byte*>(memmem(payload.c_data(), payload.size(), &exifTiffLEHeader, 3));
-        if (pHeader) {
+      if (pos == std::string::npos) {
+        pos = getHeaderOffset(payload.c_data(), payload.size(), reinterpret_cast<byte*>(&exifTiffLEHeader), 3);
+        if (pos != std::string::npos) {
           le_header = true;
         }
       }
-      if (!pHeader) {
-        pHeader = reinterpret_cast<const byte*>(memmem(payload.c_data(), payload.size(), &exifTiffBEHeader, 4));
-        if (pHeader) {
+      if (pos == std::string::npos) {
+        pos = getHeaderOffset(payload.c_data(), payload.size(), reinterpret_cast<byte*>(&exifTiffBEHeader), 4);
+        if (pos != std::string::npos) {
           be_header = true;
         }
       }
@@ -655,9 +655,9 @@ void WebPImage::decodeChunks(uint32_t filesize) {
       std::cout << binaryToHex(rawExifData.c_data(), sizePayload);
 #endif
 
-      if (pHeader) {
+      if (pos != std::string::npos) {
         XmpData xmpData;
-        ByteOrder bo = ExifParser::decode(exifData_, pHeader, payload.c_data() + payload.size() - pHeader);
+        ByteOrder bo = ExifParser::decode(exifData_, payload.c_data(pos), payload.size() - pos);
         setByteOrder(bo);
       } else {
 #ifndef SUPPRESS_WARNINGS
@@ -790,6 +790,20 @@ void WebPImage::inject_VP8X(BasicIo& iIo, bool has_xmp, bool has_exif, bool has_
         throw Error(ErrorCode::kerImageWriteFailed);
     }
   }
+}
+
+size_t WebPImage::getHeaderOffset(const byte* data, size_t data_size, const byte* header, size_t header_size) {
+  size_t pos = std::string::npos;  // error value
+  if (data_size < header_size) {
+    return pos;
+  }
+  for (size_t i = 0; i < data_size - header_size; i++) {
+    if (memcmp(header, &data[i], header_size) == 0) {
+      pos = i;
+      break;
+    }
+  }
+  return pos;
 }
 
 }  // namespace Exiv2
