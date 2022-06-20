@@ -71,7 +71,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
   const bool bPrint = option == kpsBasic || option == kpsRecursive;
   if (bPrint) {
     io_->seek(0, BasicIo::beg);  // rewind
-    size_t address = io_->tell();
+    size_t address = io_->tello();
     const char* format = " %8d | %8d | ";
 
     {
@@ -87,7 +87,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << "      magic : " << reinterpret_cast<char*>(magicdata) << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     byte data1[5];
     io_->read(data1, 4);
     data1[4] = 0;
@@ -96,7 +96,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << "      data1 : " << std::string(reinterpret_cast<char*>(&data1)) << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     byte data2[9];
     io_->read(data2, 8);
     data2[8] = 0;
@@ -105,7 +105,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << "      data2 : " << std::string(reinterpret_cast<char*>(&data2)) << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     byte camdata[33];
     io_->read(camdata, 32);
     camdata[32] = 0;
@@ -114,7 +114,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << "     camera : " << std::string(reinterpret_cast<char*>(&camdata)) << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     byte dir_version[5];
     io_->read(dir_version, 4);
     dir_version[4] = 0;
@@ -123,7 +123,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << "    version : " << std::string(reinterpret_cast<char*>(&dir_version)) << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     DataBuf unknown(20);
     io_->read(unknown.data(), unknown.size());
     {
@@ -131,11 +131,11 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << "    unknown : " << Internal::binaryToString(makeSlice(unknown, 0, unknown.size())) << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     byte jpg_img_offset[4];
     io_->read(jpg_img_offset, 4);
     byte jpg_img_length[4];
-    size_t address2 = io_->tell();
+    size_t address2 = io_->tello();
     io_->read(jpg_img_length, 4);
 
     long jpg_img_off = Exiv2::getULong(jpg_img_offset, bigEndian);
@@ -151,11 +151,11 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
           << std::endl;
     }
 
-    address = io_->tell();
+    address = io_->tello();
     byte cfa_header_offset[4];
     io_->read(cfa_header_offset, 4);
     byte cfa_header_length[4];
-    address2 = io_->tell();
+    address2 = io_->tello();
     io_->read(cfa_header_length, 4);
     long cfa_hdr_off = Exiv2::getULong(cfa_header_offset, bigEndian);
     long cfa_hdr_len = Exiv2::getULong(cfa_header_length, bigEndian);
@@ -171,10 +171,10 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
     }
 
     byte cfa_offset[4];
-    address = io_->tell();
+    address = io_->tello();
     io_->read(cfa_offset, 4);
     byte cfa_length[4];
-    address2 = io_->tell();
+    address2 = io_->tello();
     io_->read(cfa_length, 4);
     long cfa_off = Exiv2::getULong(cfa_offset, bigEndian);
     long cfa_len = Exiv2::getULong(cfa_length, bigEndian);
@@ -190,7 +190,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
     }
 
     io_->seek(jpg_img_off, BasicIo::beg);  // rewind
-    address = io_->tell();
+    address = io_->tello();
     DataBuf payload(16);  // header is different from chunks
     io_->read(payload.data(), payload.size());
     {
@@ -199,7 +199,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
     }
 
     io_->seek(cfa_hdr_off, BasicIo::beg);  // rewind
-    address = io_->tell();
+    address = io_->tello();
     io_->read(payload.data(), payload.size());
     {
       out << Internal::indent(depth) << Internal::stringFormat(format, address, cfa_hdr_len, cfa_hdr_off)
@@ -207,7 +207,7 @@ void RafImage::printStructure(std::ostream& out, PrintStructureOption option, in
     }
 
     io_->seek(cfa_off, BasicIo::beg);  // rewind
-    address = io_->tell();
+    address = io_->tello();
     io_->read(payload.data(), payload.size());
     {
       out << Internal::indent(depth) << Internal::stringFormat(format, address, cfa_len, cfa_off)

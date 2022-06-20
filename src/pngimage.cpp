@@ -72,7 +72,7 @@ std::string PngImage::mimeType() const {
   return "image/png";
 }
 
-static bool zlibToDataBuf(const byte* bytes, long length, DataBuf& result) {
+static bool zlibToDataBuf(const byte* bytes, size_t length, DataBuf& result) {
   uLongf uncompressedLen = length * 2;  // just a starting point
   int zlibResult = Z_BUF_ERROR;
 
@@ -101,7 +101,7 @@ static bool zlibToDataBuf(const byte* bytes, long length, DataBuf& result) {
   return zlibResult == Z_OK;
 }
 
-static bool zlibToCompressed(const byte* bytes, long length, DataBuf& result) {
+static bool zlibToCompressed(const byte* bytes, size_t length, DataBuf& result) {
   uLongf compressedLen = length;  // just a starting point
   int zlibResult = Z_BUF_ERROR;
 
@@ -122,7 +122,7 @@ static bool zlibToCompressed(const byte* bytes, long length, DataBuf& result) {
   return zlibResult == Z_OK;
 }
 
-static bool tEXtToDataBuf(const byte* bytes, long length, DataBuf& result) {
+static bool tEXtToDataBuf(const byte* bytes, size_t length, DataBuf& result) {
   static std::array<int, 256> value;
   static bool bFirst = true;
   if (bFirst) {
@@ -137,21 +137,21 @@ static bool tEXtToDataBuf(const byte* bytes, long length, DataBuf& result) {
 
   // calculate length and allocate result;
   // count: number of \n in the header
-  long count = 0;
+  size_t count = 0;
   // p points to the current position in the array bytes
   const byte* p = bytes;
 
   // header is '\nsomething\n number\n hex'
   // => increment p until it points to the byte after the last \n
   //    p must stay within bounds of the bytes array!
-  while ((count < 3) && (p - bytes < length)) {
+  while (count < 3 && 0 < length) {
     // length is later used for range checks of p => decrement it for each increment of p
     --length;
     if (*p++ == '\n') {
       count++;
     }
   }
-  for (long i = 0; i < length; i++)
+  for (size_t i = 0; i < length; i++)
     if (value[p[i]])
       ++count;
   result.alloc((count + 1) / 2);
@@ -160,7 +160,7 @@ static bool tEXtToDataBuf(const byte* bytes, long length, DataBuf& result) {
   count = 0;
   byte* r = result.data();
   int n = 0;  // nibble
-  for (long i = 0; i < length; i++) {
+  for (size_t i = 0; i < length; i++) {
     if (value[p[i]]) {
       int v = value[p[i]] - 1;
       if (++count % 2)
@@ -208,7 +208,7 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
     DataBuf cheaderBuf(8);
 
     while (!io_->eof() && ::strcmp(chType, "IEND") != 0) {
-      size_t address = io_->tell();
+      const size_t address = io_->tello();
 
       size_t bufRead = io_->read(cheaderBuf.data(), cheaderBuf.size());
       if (io_->error())
@@ -223,8 +223,8 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
       }
 
       // test that we haven't hit EOF, or wanting to read excessive data
-      long restore = io_->tell();
-      if (restore == -1 || dataOffset > static_cast<uint32_t>(0x7FFFFFFF) || dataOffset > imgSize - restore) {
+      const size_t restore = io_->tello();
+      if (dataOffset > imgSize - restore) {
         throw Exiv2::Error(ErrorCode::kerFailedToReadImageData);
       }
 
@@ -297,10 +297,10 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
         // decode the chunk
         bool bGood = false;
         if (tEXt) {
-          bGood = tEXtToDataBuf(data.c_data(name_l), static_cast<long>(dataOffset - name_l), dataBuf);
+          bGood = tEXtToDataBuf(data.c_data(name_l), dataOffset - name_l, dataBuf);
         }
         if (zTXt || iCCP) {
-          bGood = zlibToDataBuf(data.c_data(name_l + 1), static_cast<long>(dataOffset - name_l - 1),
+          bGood = zlibToDataBuf(data.c_data(name_l + 1), dataOffset - name_l - 1,
                                 dataBuf);  // +1 = 'compressed' flag
         }
         if (iTXt) {
@@ -375,7 +375,7 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
 
 void readChunk(DataBuf& buffer, BasicIo& io) {
 #ifdef EXIV2_DEBUG_MESSAGES
-  std::cout << "Exiv2::PngImage::readMetadata: Position: " << io.tell() << std::endl;
+  std::cout << "Exiv2::PngImage::readMetadata: Position: " << io.tello() << std::endl;
 #endif
   const size_t bufRead = io.read(buffer.data(), buffer.size());
   if (io.error()) {
@@ -407,8 +407,8 @@ void PngImage::readMetadata() {
 
     // Decode chunk data length.
     uint32_t chunkLength = cheaderBuf.read_uint32(0, Exiv2::bigEndian);
-    long pos = io_->tell();
-    if (pos == -1 || chunkLength > static_cast<uint32_t>(0x7FFFFFFF) || chunkLength > imgSize - pos) {
+    const size_t pos = io_->tello();
+    if (chunkLength > imgSize - pos) {
       throw Exiv2::Error(ErrorCode::kerFailedToReadImageData);
     }
 
@@ -594,7 +594,7 @@ void PngImage::doWriteMetadata(BasicIo& outIo) {
 
       if (iccProfileDefined()) {
         DataBuf compressed;
-        if (zlibToCompressed(iccProfile_.c_data(), static_cast<long>(iccProfile_.size()), compressed)) {
+        if (zlibToCompressed(iccProfile_.c_data(), iccProfile_.size(), compressed)) {
           const auto nameLength = static_cast<uint32_t>(profileName_.size());
           const uint32_t chunkLength = nameLength + 2 + static_cast<uint32_t>(compressed.size());
           byte length[4];

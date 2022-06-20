@@ -194,7 +194,7 @@ void PsdImage::readMetadata() {
       throw Error(ErrorCode::kerNotAnImage, "Photoshop");
     }
     uint32_t resourceSize = getULong(buf, bigEndian);
-    uint32_t curOffset = io_->tell();
+    const size_t curOffset = io_->tello();
 
 #ifdef EXIV2_DEBUG_MESSAGES
     std::cerr << std::hex << "resourceId: " << resourceId << std::dec << " length: " << resourceSize << std::hex
@@ -282,7 +282,7 @@ void PsdImage::readResourceBlock(uint16_t resourceId, uint32_t resourceSize) {
         throw Error(ErrorCode::kerNotAnImage, "Photoshop");
       }
       NativePreview nativePreview;
-      nativePreview.position_ = io_->tell();
+      nativePreview.position_ = io_->tello();
       nativePreview.size_ = getLong(buf + 20, bigEndian);  // compressedsize
       nativePreview.width_ = getLong(buf + 4, bigEndian);
       nativePreview.height_ = getLong(buf + 8, bigEndian);
@@ -382,7 +382,7 @@ void PsdImage::doWriteMetadata(BasicIo& outIo) {
   if (outIo.error())
     throw Error(ErrorCode::kerImageWriteFailed);
 
-  uint32_t resLenOffset = io_->tell();  // remember for later update
+  const size_t resLenOffset = io_->tello();  // remember for later update
 
   // Read length of all resource blocks from original PSD
   if (io_->read(buf, 4) != 4)
@@ -433,7 +433,7 @@ void PsdImage::doWriteMetadata(BasicIo& outIo) {
 
     uint32_t resourceSize = getULong(buf, bigEndian);
     uint32_t pResourceSize = (resourceSize + 1) & ~1;  // padded resource size
-    uint32_t curOffset = io_->tell();
+    const size_t curOffset = io_->tello();
 
     // Write IPTC_NAA resource block
     if ((resourceId == kPhotoshopResourceID_IPTC_NAA || resourceId > kPhotoshopResourceID_IPTC_NAA) && !iptcDone) {
