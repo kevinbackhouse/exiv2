@@ -32,16 +32,16 @@ TEST(MemIo_Default, seekBefore0Returns1ButItDoesNotSetEofToTrue) {
 
 TEST(MemIo_Default, seekToEndPosition_doesNotTriggerEof) {
   MemIo io;
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
   ASSERT_EQ(0, io.seek(0, BasicIo::end));
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
   ASSERT_FALSE(io.eof());
 }
 
 TEST(MemIo_Default, seekToEndPositionAndReadTriggersEof) {
   MemIo io;
   ASSERT_EQ(0, io.seek(0, BasicIo::end));
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
 
   std::array<byte, 64> buf2;
   buf2.fill(0);
@@ -82,9 +82,9 @@ TEST(MemIo, seekBeyondBoundsDoesNotMoveThePosition) {
   buf.fill(0);
 
   MemIo io(buf.data(), buf.size());
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
   ASSERT_EQ(1, io.seek(65, BasicIo::beg));
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
 }
 
 TEST(MemIo, seekInsideBoundsMoveThePosition) {
@@ -92,9 +92,9 @@ TEST(MemIo, seekInsideBoundsMoveThePosition) {
   buf.fill(0);
 
   MemIo io(buf.data(), buf.size());
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
   ASSERT_EQ(0, io.seek(32, BasicIo::beg));
-  ASSERT_EQ(32, io.tell());
+  ASSERT_EQ(32, io.tello());
 }
 
 TEST(MemIo, seekInsideBoundsUsingBeg_resetsThePosition) {
@@ -105,7 +105,7 @@ TEST(MemIo, seekInsideBoundsUsingBeg_resetsThePosition) {
   std::vector<std::int64_t> positions{0, 8, 16, 32, 64};
   for (auto pos : positions) {
     ASSERT_EQ(0, io.seek(pos, BasicIo::beg));
-    ASSERT_EQ(pos, io.tell());
+    ASSERT_EQ(pos, io.tello());
   }
 }
 
@@ -118,7 +118,7 @@ TEST(MemIo, seekInsideBoundsUsingCur_shiftThePosition) {
   std::vector<std::int64_t> positions{4, 8, 16, 32, 64};
   for (size_t i = 0; i < shifts.size(); ++i) {
     ASSERT_EQ(0, io.seek(shifts[i], BasicIo::cur));
-    ASSERT_EQ(positions[i], io.tell());
+    ASSERT_EQ(positions[i], io.tello());
   }
 }
 
@@ -127,9 +127,9 @@ TEST(MemIo, seekToEndPosition_doesNotTriggerEof) {
   buf.fill(0);
 
   MemIo io(buf.data(), buf.size());
-  ASSERT_EQ(0, io.tell());
+  ASSERT_EQ(0, io.tello());
   ASSERT_EQ(0, io.seek(0, BasicIo::end));
-  ASSERT_EQ(64, io.tell());
+  ASSERT_EQ(64, io.tello());
   ASSERT_FALSE(io.eof());
 }
 
@@ -139,7 +139,7 @@ TEST(MemIo, seekToEndPositionAndReadTriggersEof) {
 
   MemIo io(buf.data(), buf.size());
   ASSERT_EQ(0, io.seek(0, BasicIo::end));
-  ASSERT_EQ(64, io.tell());
+  ASSERT_EQ(64, io.tello());
 
   std::array<byte, 64> buf2;
   buf2.fill(0);
