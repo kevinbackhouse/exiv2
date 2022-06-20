@@ -72,8 +72,8 @@ std::string PngImage::mimeType() const {
   return "image/png";
 }
 
-static bool zlibToDataBuf(const byte* bytes, uLongf length, DataBuf& result) {
-  uLongf uncompressedLen = length * 2;  // just a starting point
+static bool zlibToDataBuf(const byte* bytes, size_t length, DataBuf& result) {
+  uLongf uncompressedLen = static_cast<uLongf>(length * 2);  // just a starting point
   int zlibResult = Z_BUF_ERROR;
 
   do {
@@ -101,8 +101,8 @@ static bool zlibToDataBuf(const byte* bytes, uLongf length, DataBuf& result) {
   return zlibResult == Z_OK;
 }
 
-static bool zlibToCompressed(const byte* bytes, uLongf length, DataBuf& result) {
-  uLongf compressedLen = length;  // just a starting point
+static bool zlibToCompressed(const byte* bytes, size_t length, DataBuf& result) {
+  uLongf compressedLen = static_cast<uLongf>(length);  // just a starting point
   int zlibResult = Z_BUF_ERROR;
 
   do {
