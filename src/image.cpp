@@ -370,7 +370,7 @@ void Image::printIFDStructure(BasicIo& io, std::ostream& out, Exiv2::PrintStruct
       const bool bOffsetIsPointer = count_x_size > 4;
 
       if (bOffsetIsPointer) {                                                       // read into buffer
-        const size_t restore = io.tell();                                          // save
+        const size_t restore = io.tell();                                           // save
         io.seekOrThrow(offset, BasicIo::beg, ErrorCode::kerCorruptedMetadata);      // position
         io.readOrThrow(buf.data(), count_x_size, ErrorCode::kerCorruptedMetadata);  // read
         io.seekOrThrow(restore, BasicIo::beg, ErrorCode::kerCorruptedMetadata);     // restore
