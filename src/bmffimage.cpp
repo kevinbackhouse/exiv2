@@ -478,7 +478,7 @@ size_t BmffImage::boxHandler(std::ostream& out /* = std::cout*/, Exiv2::PrintStr
 void BmffImage::parseTiff(uint32_t root_tag, uint64_t length, uint64_t start) {
   enforce(start <= io_->size(), ErrorCode::kerCorruptedMetadata);
   enforce(length <= io_->size() - start, ErrorCode::kerCorruptedMetadata);
-  enforce(start <= std::numeric_limits<int64_t>::max(), ErrorCode::kerCorruptedMetadata);
+  enforce(start <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max()), ErrorCode::kerCorruptedMetadata);
   enforce(length <= std::numeric_limits<size_t>::max(), ErrorCode::kerCorruptedMetadata);
 
   // read and parse exif data
