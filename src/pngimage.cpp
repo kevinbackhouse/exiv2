@@ -72,7 +72,7 @@ std::string PngImage::mimeType() const {
   return "image/png";
 }
 
-static bool zlibToDataBuf(const byte* bytes, size_t length, DataBuf& result) {
+static bool zlibToDataBuf(const byte* bytes, uLongf length, DataBuf& result) {
   uLongf uncompressedLen = length * 2;  // just a starting point
   int zlibResult = Z_BUF_ERROR;
 
@@ -101,7 +101,7 @@ static bool zlibToDataBuf(const byte* bytes, size_t length, DataBuf& result) {
   return zlibResult == Z_OK;
 }
 
-static bool zlibToCompressed(const byte* bytes, size_t length, DataBuf& result) {
+static bool zlibToCompressed(const byte* bytes, uLongf length, DataBuf& result) {
   uLongf compressedLen = length;  // just a starting point
   int zlibResult = Z_BUF_ERROR;
 
@@ -208,7 +208,7 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
     DataBuf cheaderBuf(8);
 
     while (!io_->eof() && ::strcmp(chType, "IEND") != 0) {
-      const size_t address = io_->tello();
+      const size_t address = io_->tell();
 
       size_t bufRead = io_->read(cheaderBuf.data(), cheaderBuf.size());
       if (io_->error())
@@ -223,7 +223,7 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
       }
 
       // test that we haven't hit EOF, or wanting to read excessive data
-      const size_t restore = io_->tello();
+      const size_t restore = io_->tell();
       if (dataOffset > imgSize - restore) {
         throw Exiv2::Error(ErrorCode::kerFailedToReadImageData);
       }
@@ -375,7 +375,7 @@ void PngImage::printStructure(std::ostream& out, PrintStructureOption option, in
 
 void readChunk(DataBuf& buffer, BasicIo& io) {
 #ifdef EXIV2_DEBUG_MESSAGES
-  std::cout << "Exiv2::PngImage::readMetadata: Position: " << io.tello() << std::endl;
+  std::cout << "Exiv2::PngImage::readMetadata: Position: " << io.tell() << std::endl;
 #endif
   const size_t bufRead = io.read(buffer.data(), buffer.size());
   if (io.error()) {
@@ -407,7 +407,7 @@ void PngImage::readMetadata() {
 
     // Decode chunk data length.
     uint32_t chunkLength = cheaderBuf.read_uint32(0, Exiv2::bigEndian);
-    const size_t pos = io_->tello();
+    const size_t pos = io_->tell();
     if (chunkLength > imgSize - pos) {
       throw Exiv2::Error(ErrorCode::kerFailedToReadImageData);
     }

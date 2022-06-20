@@ -458,7 +458,7 @@ int FileIo::seek(int64_t offset, Position pos) {
 #endif
 }
 
-size_t FileIo::tello() const {
+size_t FileIo::tell() const {
   const long pos = std::ftell(p_->fp_);
   enforce(pos >= 0, ErrorCode::kerInputDataReadFailed);
   return static_cast<size_t>(pos);
@@ -788,7 +788,7 @@ int MemIo::munmap() {
   return 0;
 }
 
-size_t MemIo::tello() const {
+size_t MemIo::tell() const {
   return p_->idx_;
 }
 
@@ -1343,7 +1343,7 @@ int RemoteIo::munmap() {
   return 0;
 }
 
-size_t RemoteIo::tello() const {
+size_t RemoteIo::tell() const {
   return p_->idx_;
 }
 

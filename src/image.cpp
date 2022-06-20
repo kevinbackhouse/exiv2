@@ -319,10 +319,10 @@ void Image::printIFDStructure(BasicIo& io, std::ostream& out, Exiv2::PrintStruct
 
     // Read the dictionary
     for (int i = 0; i < dirLength; i++) {
-      if (visits.find(io.tello()) != visits.end()) {  // #547
+      if (visits.find(io.tell()) != visits.end()) {  // #547
         throw Error(ErrorCode::kerCorruptedMetadata);
       }
-      visits.insert(io.tello());
+      visits.insert(io.tell());
 
       if (bFirst && bPrint) {
         out << Internal::indent(depth) << " address |    tag                              |     "
@@ -370,7 +370,7 @@ void Image::printIFDStructure(BasicIo& io, std::ostream& out, Exiv2::PrintStruct
       const bool bOffsetIsPointer = count_x_size > 4;
 
       if (bOffsetIsPointer) {                                                       // read into buffer
-        const size_t restore = io.tello();                                          // save
+        const size_t restore = io.tell();                                          // save
         io.seekOrThrow(offset, BasicIo::beg, ErrorCode::kerCorruptedMetadata);      // position
         io.readOrThrow(buf.data(), count_x_size, ErrorCode::kerCorruptedMetadata);  // read
         io.seekOrThrow(restore, BasicIo::beg, ErrorCode::kerCorruptedMetadata);     // restore
@@ -410,7 +410,7 @@ void Image::printIFDStructure(BasicIo& io, std::ostream& out, Exiv2::PrintStruct
 
         if (option == kpsRecursive && (tag == 0x8769 /* ExifTag */ || tag == 0x014a /*SubIFDs*/ || type == tiffIfd)) {
           for (size_t k = 0; k < count; k++) {
-            const size_t restore = io.tello();
+            const size_t restore = io.tell();
             offset = byteSwap4(buf, k * size, bSwap);
             printIFDStructure(io, out, option, offset, bSwap, c, depth);
             io.seekOrThrow(restore, BasicIo::beg, ErrorCode::kerCorruptedMetadata);
@@ -421,7 +421,7 @@ void Image::printIFDStructure(BasicIo& io, std::ostream& out, Exiv2::PrintStruct
               throw Error(ErrorCode::kerCorruptedMetadata);
             }
 
-            const size_t restore = io.tello();
+            const size_t restore = io.tell();
             io.seekOrThrow(offset, BasicIo::beg, ErrorCode::kerCorruptedMetadata);  // position
             std::vector<byte> bytes(count);                                         // allocate memory
             // TODO: once we have C++11 use bytes.data()
@@ -431,7 +431,7 @@ void Image::printIFDStructure(BasicIo& io, std::ostream& out, Exiv2::PrintStruct
             IptcData::printStructure(out, makeSliceUntil(bytes.data(), count), depth);
           }
         } else if (option == kpsRecursive && tag == 0x927c /* MakerNote */ && count > 10) {
-          const size_t restore = io.tello();  // save
+          const size_t restore = io.tell();  // save
 
           uint32_t jump = 10;
           byte bytes[20];

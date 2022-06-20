@@ -154,7 +154,7 @@ void WebPImage::doWriteMetadata(BasicIo& outIo) {
   /* Verify for a VP8X Chunk First before writing in
    case we have any exif or xmp data, also check
    for any chunks with alpha frame/layer set */
-  while (!io_->eof() && io_->tello() < filesize) {
+  while (!io_->eof() && io_->tell() < filesize) {
     io_->readOrThrow(chunkId.data(), WEBP_TAG_SIZE, Exiv2::ErrorCode::kerCorruptedMetadata);
     io_->readOrThrow(size_buff, WEBP_TAG_SIZE, Exiv2::ErrorCode::kerCorruptedMetadata);
     const uint32_t size_u32 = Exiv2::getULong(size_buff, littleEndian);
@@ -284,14 +284,14 @@ void WebPImage::doWriteMetadata(BasicIo& outIo) {
   }
 
   io_->seek(12, BasicIo::beg);
-  while (!io_->eof() && io_->tello() < filesize) {
+  while (!io_->eof() && io_->tell() < filesize) {
     io_->readOrThrow(chunkId.data(), 4, Exiv2::ErrorCode::kerCorruptedMetadata);
     io_->readOrThrow(size_buff, 4, Exiv2::ErrorCode::kerCorruptedMetadata);
 
     const uint32_t size_u32 = Exiv2::getULong(size_buff, littleEndian);
     DataBuf payload(size_u32);
     io_->readOrThrow(payload.data(), size_u32, Exiv2::ErrorCode::kerCorruptedMetadata);
-    if (io_->tello() % 2)
+    if (io_->tell() % 2)
       io_->seek(+1, BasicIo::cur);  // skip pad
 
     if (equalsWebPTag(chunkId, WEBP_CHUNK_HEADER_VP8X)) {
@@ -326,7 +326,7 @@ void WebPImage::doWriteMetadata(BasicIo& outIo) {
         throw Error(ErrorCode::kerImageWriteFailed);
       if (outIo.write(payload.c_data(), payload.size()) != payload.size())
         throw Error(ErrorCode::kerImageWriteFailed);
-      if (outIo.tello() % 2) {
+      if (outIo.tell() % 2) {
         if (outIo.write(&WEBP_PAD_ODD, 1) != 1)
           throw Error(ErrorCode::kerImageWriteFailed);
       }
@@ -358,7 +358,7 @@ void WebPImage::doWriteMetadata(BasicIo& outIo) {
     }
 
     // Encoder required to pad odd sized data with a null byte
-    if (outIo.tello() % 2) {
+    if (outIo.tell() % 2) {
       if (outIo.write(&WEBP_PAD_ODD, 1) != 1)
         throw Error(ErrorCode::kerImageWriteFailed);
     }
@@ -374,7 +374,7 @@ void WebPImage::doWriteMetadata(BasicIo& outIo) {
     if (outIo.write(blob.data(), blob.size()) != blob.size()) {
       throw Error(ErrorCode::kerImageWriteFailed);
     }
-    if (outIo.tello() % 2) {
+    if (outIo.tell() % 2) {
       if (outIo.write(&WEBP_PAD_ODD, 1) != 1)
         throw Error(ErrorCode::kerImageWriteFailed);
     }
@@ -389,7 +389,7 @@ void WebPImage::doWriteMetadata(BasicIo& outIo) {
     if (outIo.write(reinterpret_cast<const byte*>(xmp.data()), xmp.size()) != xmp.size()) {
       throw Error(ErrorCode::kerImageWriteFailed);
     }
-    if (outIo.tello() % 2) {
+    if (outIo.tell() % 2) {
       if (outIo.write(&WEBP_PAD_ODD, 1) != 1)
         throw Error(ErrorCode::kerImageWriteFailed);
     }
@@ -432,8 +432,8 @@ void WebPImage::printStructure(std::ostream& out, PrintStructureOption option, i
     }
 
     io_->seek(0, BasicIo::beg);  // rewind
-    while (!io_->eof() && io_->tello() < filesize) {
-      auto offset = io_->tello();
+    while (!io_->eof() && io_->tell() < filesize) {
+      auto offset = io_->tell();
       byte size_buff[WEBP_TAG_SIZE];
       io_->read(chunkId.data(), WEBP_TAG_SIZE);
       io_->read(size_buff, WEBP_TAG_SIZE);
@@ -459,7 +459,7 @@ void WebPImage::printStructure(std::ostream& out, PrintStructureOption option, i
         out.write(payload.c_str(), payload.size());
       }
 
-      if (offset && io_->tello() % 2)
+      if (offset && io_->tell() % 2)
         io_->seek(+1, BasicIo::cur);  // skip padding byte on sub-chunks
     }
   }
@@ -502,15 +502,15 @@ void WebPImage::decodeChunks(uint32_t filesize) {
 #endif
 
   chunkId.write_uint8(4, '\0');
-  while (!io_->eof() && io_->tello() < filesize) {
+  while (!io_->eof() && io_->tell() < filesize) {
     io_->readOrThrow(chunkId.data(), WEBP_TAG_SIZE, Exiv2::ErrorCode::kerCorruptedMetadata);
     io_->readOrThrow(size_buff, WEBP_TAG_SIZE, Exiv2::ErrorCode::kerCorruptedMetadata);
 
     const uint32_t size = Exiv2::getULong(size_buff, littleEndian);
 
     // Check that `size` is within bounds.
-    enforce(io_->tello() <= filesize, Exiv2::ErrorCode::kerCorruptedMetadata);
-    enforce(size <= (filesize - io_->tello()), Exiv2::ErrorCode::kerCorruptedMetadata);
+    enforce(io_->tell() <= filesize, Exiv2::ErrorCode::kerCorruptedMetadata);
+    enforce(size <= (filesize - io_->tell()), Exiv2::ErrorCode::kerCorruptedMetadata);
 
     DataBuf payload(size);
 
@@ -681,7 +681,7 @@ void WebPImage::decodeChunks(uint32_t filesize) {
       io_->seek(size, BasicIo::cur);
     }
 
-    if (io_->tello() % 2)
+    if (io_->tell() % 2)
       io_->seek(+1, BasicIo::cur);
   }
 }
@@ -784,7 +784,7 @@ void WebPImage::inject_VP8X(BasicIo& iIo, bool has_xmp, bool has_exif, bool has_
       throw Error(ErrorCode::kerImageWriteFailed);
     if (iIo.write(iccProfile_.c_data(), iccProfile_.size()) != iccProfile_.size())
       throw Error(ErrorCode::kerImageWriteFailed);
-    if (iIo.tello() % 2) {
+    if (iIo.tell() % 2) {
       if (iIo.write(&WEBP_PAD_ODD, 1) != 1)
         throw Error(ErrorCode::kerImageWriteFailed);
     }

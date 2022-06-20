@@ -103,7 +103,7 @@ bool isTgaType(BasicIo& iIo, bool /*advance*/) {
     return true;
   }
   byte buf[26];
-  const size_t curPos = iIo.tello();
+  const size_t curPos = iIo.tell();
   if (curPos < 26)
     return false;
 

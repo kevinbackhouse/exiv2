@@ -291,7 +291,7 @@ void JpegBase::readMetadata() {
 
 #define REPORT_MARKER                                 \
   if ((option == kpsBasic || option == kpsRecursive)) \
-  out << Internal::stringFormat("%8ld | 0xff%02x %-5s", io_->tello() - 2, marker, nm[marker].c_str())
+  out << Internal::stringFormat("%8ld | 0xff%02x %-5s", io_->tell() - 2, marker, nm[marker].c_str())
 
 void JpegBase::printStructure(std::ostream& out, PrintStructureOption option, int depth) {
   if (io_->open() != 0)
@@ -412,7 +412,7 @@ void JpegBase::printStructure(std::ostream& out, PrintStructureOption option, in
           }
         } else if (option == kpsIptcErase && signature == "Photoshop 3.0") {
           // delete IPTC data segment from JPEG
-          iptcDataSegs.push_back(io_->tello() - size);
+          iptcDataSegs.push_back(io_->tell() - size);
           iptcDataSegs.push_back(size);
         } else if (bPrint) {
           const size_t start = 2;
@@ -618,7 +618,7 @@ void JpegBase::doWriteMetadata(BasicIo& outIo) {
   // Used to initialize search variables such as skipCom.
   static const size_t notfound = std::numeric_limits<size_t>::max();
 
-  const size_t seek = io_->tello();
+  const size_t seek = io_->tell();
   size_t count = 0;
   size_t search = 0;
   size_t insertPos = 0;

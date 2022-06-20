@@ -154,7 +154,7 @@ std::string BmffImage::uuidName(Exiv2::DataBuf& uuid) {
 
 size_t BmffImage::boxHandler(std::ostream& out /* = std::cout*/, Exiv2::PrintStructureOption option /* = kpsNone */,
                              size_t pbox_end, int depth) {
-  const size_t address = io_->tello();
+  const size_t address = io_->tell();
   // never visit a box twice!
   if (depth == 0)
     visits_.clear();
@@ -198,7 +198,7 @@ size_t BmffImage::boxHandler(std::ostream& out /* = std::cout*/, Exiv2::PrintStr
   }
 
   // read data in box and restore file position
-  const size_t restore = io_->tello();
+  const size_t restore = io_->tell();
   enforce(box_length >= hdrsize, Exiv2::ErrorCode::kerCorruptedMetadata);
   enforce(box_length - hdrsize <= pbox_end - restore, Exiv2::ErrorCode::kerCorruptedMetadata);
 
@@ -291,7 +291,7 @@ size_t BmffImage::boxHandler(std::ostream& out /* = std::cout*/, Exiv2::PrintStr
         bLF = false;
       }
       io_->seek(skip, BasicIo::cur);
-      while (io_->tello() < box_end) {
+      while (io_->tell() < box_end) {
         io_->seek(boxHandler(out, option, box_end, depth + 1), BasicIo::beg);
       }
       // post-process meta box to recover Exif and XMP
@@ -416,11 +416,11 @@ size_t BmffImage::boxHandler(std::ostream& out /* = std::cout*/, Exiv2::PrintStr
           // https://github.com/lclevy/canon_cr3/blob/7be75d6/parse_cr3.py#L271
           io_->seek(8, BasicIo::cur);
         }
-        while (io_->tello() < box_end) {
+        while (io_->tell() < box_end) {
           io_->seek(boxHandler(out, option, box_end, depth + 1), BasicIo::beg);
         }
       } else if (name == "xmp") {
-        parseXmp(box_length, io_->tello());
+        parseXmp(box_length, io_->tell());
       }
     } break;
 
@@ -437,10 +437,10 @@ size_t BmffImage::boxHandler(std::ostream& out /* = std::cout*/, Exiv2::PrintStr
       parseTiff(Internal::Tag::cmt4, box_length);
       break;
     case TAG_exif:
-      parseTiff(Internal::Tag::root, buffer_size, io_->tello());
+      parseTiff(Internal::Tag::root, buffer_size, io_->tell());
       break;
     case TAG_xml:
-      parseXmp(buffer_size, io_->tello());
+      parseXmp(buffer_size, io_->tell());
       break;
     case TAG_thmb:
       switch (version) {
@@ -482,7 +482,7 @@ void BmffImage::parseTiff(uint32_t root_tag, uint64_t length, uint64_t start) {
   enforce(length <= std::numeric_limits<size_t>::max(), ErrorCode::kerCorruptedMetadata);
 
   // read and parse exif data
-  const size_t restore = io_->tello();
+  const size_t restore = io_->tell();
   DataBuf exif(static_cast<size_t>(length));
   io_->seek(static_cast<int64_t>(start), BasicIo::beg);
   if (exif.size() > 8 && io_->read(exif.data(), exif.size()) == exif.size()) {
@@ -504,7 +504,7 @@ void BmffImage::parseTiff(uint32_t root_tag, uint64_t length, uint64_t start) {
 
 void BmffImage::parseTiff(uint32_t root_tag, uint64_t length) {
   if (length > 8) {
-    enforce(length - 8 <= io_->size() - io_->tello(), ErrorCode::kerCorruptedMetadata);
+    enforce(length - 8 <= io_->size() - io_->tell(), ErrorCode::kerCorruptedMetadata);
     enforce(length - 8 <= std::numeric_limits<size_t>::max(), ErrorCode::kerCorruptedMetadata);
     DataBuf data(static_cast<size_t>(length - 8u));
     const size_t bufRead = io_->read(data.data(), data.size());
@@ -523,7 +523,7 @@ void BmffImage::parseXmp(uint64_t length, uint64_t start) {
   enforce(start <= io_->size(), ErrorCode::kerCorruptedMetadata);
   enforce(length <= io_->size() - start, ErrorCode::kerCorruptedMetadata);
 
-  const size_t restore = io_->tello();
+  const size_t restore = io_->tell();
   io_->seek(static_cast<int64_t>(start), BasicIo::beg);
 
   auto lengthSizeT = static_cast<size_t>(length);
@@ -546,7 +546,7 @@ void BmffImage::parseXmp(uint64_t length, uint64_t start) {
 void BmffImage::parseCr3Preview(DataBuf& data, std::ostream& out, bool bTrace, uint8_t version, size_t width_offset,
                                 size_t height_offset, size_t size_offset, size_t relative_position) {
   // Derived from https://github.com/lclevy/canon_cr3
-  const size_t here = io_->tello();
+  const size_t here = io_->tell();
   enforce(here <= std::numeric_limits<size_t>::max() - relative_position, ErrorCode::kerCorruptedMetadata);
   NativePreview nativePreview;
   nativePreview.position_ = here + relative_position;

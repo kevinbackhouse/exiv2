@@ -102,7 +102,7 @@ void writeTemp(BasicIo& tempIo, const std::string& data) {
 
 //! Get the current write position of temp file, taking care of errors
 uint32_t posTemp(const BasicIo& tempIo) {
-  const size_t pos = tempIo.tello();
+  const size_t pos = tempIo.tell();
   enforce(pos <= std::numeric_limits<uint32_t>::max(), ErrorCode::kerImageWriteFailed);
   return static_cast<uint32_t>(pos);
 }
@@ -1163,7 +1163,7 @@ bool isEpsType(BasicIo& iIo, bool advance) {
       bufSize = i.size();
     }
   }
-  const size_t restore = iIo.tello();  // save
+  const size_t restore = iIo.tell();  // save
   DataBuf buf = iIo.read(bufSize);
   if (iIo.error() || buf.size() != bufSize) {
     iIo.seek(restore, BasicIo::beg);
