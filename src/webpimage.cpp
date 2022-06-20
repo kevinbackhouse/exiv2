@@ -443,8 +443,7 @@ void WebPImage::printStructure(std::ostream& out, PrintStructureOption option, i
 
       if (bPrint) {
         out << Internal::indent(depth)
-            << Internal::stringFormat("  %s | %8u | %8u | ", chunkId.c_str(), size,
-                                      static_cast<uint32_t>(offset))
+            << Internal::stringFormat("  %s | %8u | %8u | ", chunkId.c_str(), size, static_cast<uint32_t>(offset))
             << Internal::binaryToString(makeSlice(payload, 0, payload.size() > 32 ? 32 : payload.size())) << std::endl;
       }
 

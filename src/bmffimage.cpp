@@ -495,9 +495,8 @@ void BmffImage::parseTiff(uint32_t root_tag, uint64_t length, uint64_t start) {
           punt = i;
     }
     if (punt != eof) {
-      Internal::TiffParserWorker::decode(exifData(), iptcData(), xmpData(), exif.c_data(punt),
-                                         exif.size() - punt, root_tag,
-                                         Internal::TiffMapping::findDecoder);
+      Internal::TiffParserWorker::decode(exifData(), iptcData(), xmpData(), exif.c_data(punt), exif.size() - punt,
+                                         root_tag, Internal::TiffMapping::findDecoder);
     }
   }
   io_->seek(restore, BasicIo::beg);
@@ -548,8 +547,7 @@ void BmffImage::parseCr3Preview(DataBuf& data, std::ostream& out, bool bTrace, u
                                 size_t height_offset, size_t size_offset, size_t relative_position) {
   // Derived from https://github.com/lclevy/canon_cr3
   const size_t here = io_->tello();
-  enforce(here <= std::numeric_limits<size_t>::max() - relative_position,
-          ErrorCode::kerCorruptedMetadata);
+  enforce(here <= std::numeric_limits<size_t>::max() - relative_position, ErrorCode::kerCorruptedMetadata);
   NativePreview nativePreview;
   nativePreview.position_ = here + relative_position;
   nativePreview.width_ = data.read_uint16(width_offset, endian_);

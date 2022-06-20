@@ -11,8 +11,8 @@
 #include "config.h"
 
 #include "basicio.hpp"
-#include "epsimage.hpp"
 #include "enforce.hpp"
+#include "epsimage.hpp"
 #include "error.hpp"
 #include "futils.hpp"
 #include "image.hpp"
