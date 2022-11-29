@@ -189,7 +189,9 @@ jobs:
         shell: pwsh
       - name: Build
         run: |
-          g++ filesystem_test.cpp ; \
+          g++ filesystem_test.cpp -o filesystem_test ; \
+          echo hi ; \
+          ./filesystem_test ; \
           cmake -GNinja \
             -DCMAKE_CXX_FLAGS=-Wno-deprecated \
             -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
