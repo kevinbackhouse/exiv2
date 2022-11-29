@@ -189,6 +189,7 @@ jobs:
         shell: pwsh
       - name: Build
         run: |
+          g++ filesystem_test.cpp ; \
           cmake -GNinja \
             -DCMAKE_CXX_FLAGS=-Wno-deprecated \
             -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
@@ -201,6 +202,7 @@ jobs:
             -DEXIV2_BUILD_UNIT_TESTS=OFF \
             -S . -B build && \
           cmake --build build --parallel
+        shell: C:\tools\cygwin\bin\bash.exe -eo pipefail '{0}'
 
       - name: Test
         run: |

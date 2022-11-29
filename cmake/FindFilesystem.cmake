@@ -204,6 +204,8 @@ if(CXX_FILESYSTEM_HAVE_FS)
         }
     ]] code @ONLY)
 
+    message("${code}")
+
     # Check a simple filesystem program without any linker flags
     _cmcm_check_cxx_source("${code}" CXX_FILESYSTEM_NO_LINK_NEEDED)
 
