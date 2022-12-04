@@ -15,11 +15,10 @@
 #include "utils.hpp"
 
 // + standard includes
+#include <INIReader.h>
 #include <array>
 #include <filesystem>
 #include <iostream>
-#include <INIReader.h>
-
 
 namespace fs = std::filesystem;
 
