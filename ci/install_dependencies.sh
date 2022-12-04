@@ -41,7 +41,7 @@ case "$distro_id" in
 
     'arch')
         pacman --noconfirm -Syu
-        pacman --noconfirm --needed -S gcc clang cmake make expat zlib brotli libssh curl gtest dos2unix which diffutils inih
+        pacman --noconfirm --needed -S gcc clang cmake make expat zlib brotli libssh curl gtest dos2unix which diffutils libinih
         ;;
 
     'ubuntu')
@@ -62,7 +62,7 @@ case "$distro_id" in
 
     'opensuse-tumbleweed')
         zypper --non-interactive refresh
-        zypper --non-interactive install gcc-c++ clang cmake make libexpat-devel zlib-devel libbrotli-devel libssh-devel curl libcurl-devel git which dos2unix libxml2-tools inih-devel
+        zypper --non-interactive install gcc-c++ clang cmake make libexpat-devel zlib-devel libbrotli-devel libssh-devel curl libcurl-devel git which dos2unix libxml2-tools libinih-devel
         pushd /tmp
           curl -LO https://github.com/google/googletest/archive/release-1.8.0.tar.gz
           tar xzf   release-1.8.0.tar.gz
