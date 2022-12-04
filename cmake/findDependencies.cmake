@@ -76,6 +76,18 @@ if( ICONV_FOUND )
     message ( "-- Iconv_LIBRARIES : " ${Iconv_LIBRARIES} )
 endif()
 
+find_package(INIH)
+if( INIH_FOUND )
+    message ( "-- INIH_INCLUDE_DIRS : " ${INIH_INCLUDE_DIRS} )
+    message ( "-- INIH_LIBRARIES : " ${INIH_LIBRARIES} )
+endif()
+
+find_package(INIReader)
+if( INIReader_FOUND )
+    message ( "-- INIReader_INCLUDE_DIRS : " ${INIReader_INCLUDE_DIRS} )
+    message ( "-- INIReader_LIBRARIES : " ${INIReader_LIBRARIES} )
+endif()
+
 if( BUILD_WITH_CCACHE )
     find_program(CCACHE_FOUND ccache)
     if(CCACHE_FOUND)

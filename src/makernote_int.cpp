@@ -7,7 +7,6 @@
 // included header files
 #include "config.h"
 
-#include "ini.hpp"
 #include "makernote_int.hpp"
 #include "safe_op.hpp"
 #include "tiffcomposite_int.hpp"
@@ -19,6 +18,8 @@
 #include <array>
 #include <filesystem>
 #include <iostream>
+#include <INIReader.h>
+
 
 namespace fs = std::filesystem;
 
@@ -81,7 +82,7 @@ std::string getExiv2ConfigPath() {
 std::string readExiv2Config(const std::string& section, const std::string& value, const std::string& def) {
   std::string result = def;
 
-  Exiv2::INIReader reader(Exiv2::Internal::getExiv2ConfigPath());
+  INIReader reader(Exiv2::Internal::getExiv2ConfigPath());
   if (reader.ParseError() == 0) {
     result = reader.Get(section, value, def);
   }

@@ -30,39 +30,39 @@ distro_id=$(grep '^ID=' /etc/os-release|awk -F = '{print $2}'|sed 's/\"//g')
 
 case "$distro_id" in
     'fedora')
-        dnf -y --refresh install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel gtest-devel which dos2unix glibc-langpack-en diffutils
+        dnf -y --refresh install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel gtest-devel which dos2unix glibc-langpack-en diffutils inih-devel
         ;;
 
     'debian')
         apt-get update
-        apt-get install -y cmake g++ clang make libexpat1-dev zlib1g-dev libbrotli-dev libssh-dev libcurl4-openssl-dev libgtest-dev libxml2-utils
+        apt-get install -y cmake g++ clang make libexpat1-dev zlib1g-dev libbrotli-dev libssh-dev libcurl4-openssl-dev libgtest-dev libxml2-utils libinih-dev
         debian_build_gtest
         ;;
 
     'arch')
         pacman --noconfirm -Syu
-        pacman --noconfirm --needed -S gcc clang cmake make expat zlib brotli libssh curl gtest dos2unix which diffutils
+        pacman --noconfirm --needed -S gcc clang cmake make expat zlib brotli libssh curl gtest dos2unix which diffutils inih
         ;;
 
     'ubuntu')
         apt-get update
-        apt-get install -y cmake g++ clang make libexpat1-dev zlib1g-dev libbrotli-dev libssh-dev libcurl4-openssl-dev libgtest-dev google-mock libxml2-utils
+        apt-get install -y cmake g++ clang make libexpat1-dev zlib1g-dev libbrotli-dev libssh-dev libcurl4-openssl-dev libgtest-dev google-mock libxml2-utils libinih-dev
         debian_build_gtest
         ;;
 
     'alpine')
         apk update
-        apk add gcc g++ clang cmake make expat-dev zlib-dev brotli-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils 
+        apk add gcc g++ clang cmake make expat-dev zlib-dev brotli-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils libinih-dev
         ;;
 
     'centos'|'rhel')
         dnf clean all
-        dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix
+        dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix inih-devel
         ;;
 
     'opensuse-tumbleweed')
         zypper --non-interactive refresh
-        zypper --non-interactive install gcc-c++ clang cmake make libexpat-devel zlib-devel libbrotli-devel libssh-devel curl libcurl-devel git which dos2unix libxml2-tools
+        zypper --non-interactive install gcc-c++ clang cmake make libexpat-devel zlib-devel libbrotli-devel libssh-devel curl libcurl-devel git which dos2unix libxml2-tools inih-devel
         pushd /tmp
           curl -LO https://github.com/google/googletest/archive/release-1.8.0.tar.gz
           tar xzf   release-1.8.0.tar.gz

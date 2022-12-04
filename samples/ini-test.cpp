@@ -20,7 +20,7 @@ int main() {
 #endif
 
   const char* ini = "ini-test.ini";
-  Exiv2::INIReader reader(ini);
+  INIReader reader(ini);
 
   if (reader.ParseError() < 0) {
     std::cerr << "Can't load '" << ini << "'" << std::endl;
