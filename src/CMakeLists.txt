@@ -248,12 +248,9 @@ if( ICONV_FOUND )
     target_link_libraries( exiv2lib PRIVATE Iconv::Iconv )
 endif()
 
-if( INIH_FOUND )
-    target_link_libraries( exiv2lib PRIVATE INIH::INIH )
-endif()
-
-if( INIReader_FOUND )
-    target_link_libraries( exiv2lib PRIVATE INIReader::INIReader )
+if( inih_FOUND )
+    target_link_libraries( exiv2lib PRIVATE inih::libinih )
+    target_link_libraries( exiv2lib PRIVATE inih::inireader )
 endif()
 
 write_basic_package_version_file(exiv2ConfigVersion.cmake COMPATIBILITY ExactVersion)
