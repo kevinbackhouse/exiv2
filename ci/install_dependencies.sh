@@ -52,7 +52,7 @@ case "$distro_id" in
 
     'alpine')
         apk update
-        apk add gcc g++ clang cmake make expat-dev zlib-dev brotli-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils libinih-dev
+        apk add gcc g++ clang cmake make expat-dev zlib-dev brotli-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils inih
         ;;
 
     'centos'|'rhel')
