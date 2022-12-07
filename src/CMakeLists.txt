@@ -249,6 +249,8 @@ if( ICONV_FOUND )
 endif()
 
 if( inih_FOUND )
+    target_link_libraries( exiv2lib_int PRIVATE inih::libinih )
+    target_link_libraries( exiv2lib_int PRIVATE inih::inireader )
     target_link_libraries( exiv2lib PRIVATE inih::libinih )
     target_link_libraries( exiv2lib PRIVATE inih::inireader )
 endif()
