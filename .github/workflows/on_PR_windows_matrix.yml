@@ -128,6 +128,7 @@ jobs:
             zlib:p
             brotli:p
             curl:p
+            libinih:p
 
       - name: Build
         run: |
@@ -180,6 +181,7 @@ jobs:
             libbrotlicommon1
             libbrotlidec1
             libbrotli-devel
+            inih-devel
 
       - name: Build
         run: |
