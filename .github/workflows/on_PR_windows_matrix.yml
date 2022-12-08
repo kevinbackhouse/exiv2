@@ -128,7 +128,7 @@ jobs:
             zlib:p
             brotli:p
             curl:p
-            libinih:p
+            libinih-devel:p
 
       - name: Build
         run: |
