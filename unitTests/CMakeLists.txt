@@ -39,6 +39,7 @@ target_compile_definitions(unit_tests
 target_link_libraries(unit_tests
     PRIVATE
         exiv2lib
+        exiv2lib_int
         GTest::gtest
         GTest::gtest_main
         std::filesystem
