@@ -253,6 +253,7 @@ if( inih_FOUND )
     target_link_libraries( exiv2lib_int PRIVATE inih::inireader )
     target_link_libraries( exiv2lib PRIVATE inih::libinih )
     target_link_libraries( exiv2lib PRIVATE inih::inireader )
+    message("kevwozere: CMakeLists.txt<src>")
 endif()
 
 write_basic_package_version_file(exiv2ConfigVersion.cmake COMPATIBILITY ExactVersion)
