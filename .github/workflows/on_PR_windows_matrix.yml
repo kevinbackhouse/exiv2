@@ -115,6 +115,7 @@ jobs:
           update: true
           install: >-
             base-devel
+            libinih-devel
           pacboy: >-
             cc:p
             gcc-libs:p
@@ -128,7 +129,6 @@ jobs:
             zlib:p
             brotli:p
             curl:p
-            libinih-devel:p
 
       - name: Build
         run: |
