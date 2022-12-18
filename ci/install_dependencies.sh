@@ -72,7 +72,7 @@ case "$distro_id" in
 
     'centos')
         dnf clean all
-        dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix
+        dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix git meson
         centos_build_inih
         ;;
 
