@@ -115,7 +115,6 @@ jobs:
           update: true
           install: >-
             base-devel
-            meson
             git
           pacboy: >-
             cc:p
@@ -130,6 +129,7 @@ jobs:
             zlib:p
             brotli:p
             curl:p
+            meson:p
 
       - name: Build and install inih
         run: |
