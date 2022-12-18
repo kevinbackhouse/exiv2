@@ -115,7 +115,7 @@ jobs:
           update: true
           install: >-
             base-devel
-            libinih-devel
+            meson
           pacboy: >-
             cc:p
             gcc-libs:p
@@ -129,6 +129,15 @@ jobs:
             zlib:p
             brotli:p
             curl:p
+
+      - name: Build and install inih
+        run: |
+          git clone https://github.com/benhoyt/inih.git inih_build
+          cd inih_build
+          git checkout r56
+          meson --buildtype=plain builddir
+          meson compile -C builddir
+          meson install -C builddir
 
       - name: Build
         run: |
