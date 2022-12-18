@@ -20,6 +20,16 @@ debian_build_gtest() {
     cd ..
 }
 
+# Centos doesn't have a working version of the inih library, so we need to build it ourselves.
+centos_build_inih() {
+    [-d inih_build ] || git clone https://github.com/benhoyt/inih.git inih_build
+    cd inih_build
+    meson --buildtype=plain builddir
+    meson compile -C builddir
+    sudo meson install -C builddir
+    cd ..
+}
+
 # workaround for really bare-bones Archlinux containers:
 if [ -x "$(command -v pacman)" ]; then
     pacman --noconfirm -Sy
@@ -55,9 +65,15 @@ case "$distro_id" in
         apk add gcc g++ clang cmake make expat-dev zlib-dev brotli-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils inih-dev inih-inireader-dev
         ;;
 
-    'centos'|'rhel')
+    'rhel')
         dnf clean all
         dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix inih-devel
+        ;;
+
+    'centos')
+        dnf clean all
+        dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix
+        centos_build_inih
         ;;
 
     'opensuse-tumbleweed')
