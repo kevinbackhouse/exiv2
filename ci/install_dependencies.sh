@@ -74,7 +74,8 @@ case "$distro_id" in
     'centos')
         dnf clean all
         dnf -y install gcc-c++ clang cmake make expat-devel zlib-devel brotli-devel libssh-devel libcurl-devel which dos2unix git
-        dnf -y --enablerepo=crb install inih-devel
+        dnf -y --enablerepo=crb install meson
+        centos_build_inih
         ;;
 
     'opensuse-tumbleweed')
