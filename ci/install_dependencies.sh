@@ -27,7 +27,7 @@ centos_build_inih() {
     git checkout r56
     meson --buildtype=plain builddir
     meson compile -C builddir
-    sudo meson install -C builddir
+    meson install -C builddir
     cd ..
 }
 
