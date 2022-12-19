@@ -222,4 +222,8 @@ jobs:
         run: |
           pwd && \
           ls -l && \
+          ls -l test/data && \
+          cd build && \
+          ./bin/exiv2 ../test/data/Stonehenge.exv && \
+          cd .. && \
           ctest --test-dir build --output-on-failure
