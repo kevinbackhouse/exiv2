@@ -220,4 +220,6 @@ jobs:
 
       - name: Test
         run: |
+          pwd && \
+          ls -l && \
           ctest --test-dir build --output-on-failure
