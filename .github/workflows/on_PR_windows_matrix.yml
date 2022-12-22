@@ -196,10 +196,11 @@ jobs:
 
       - name: Build and install inih
         run: |
+          export CCACHE_DISABLE=1 && \
           git clone https://github.com/benhoyt/inih.git inih_build && \
           cd inih_build && \
           git checkout r56 && \
-          meson --buildtype=plain -Ddefault_library=static builddir && \
+          meson --buildtype=plain builddir && \
           meson compile -C builddir && \
           meson install -C builddir
 
