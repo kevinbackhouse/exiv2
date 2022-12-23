@@ -202,7 +202,9 @@ jobs:
           git checkout r56 && \
           meson --buildtype=plain builddir && \
           meson compile -C builddir && \
-          meson install -C builddir
+          meson install -C builddir && \
+          env && \
+          echo $CC
 
       - name: Build
         run: |
@@ -216,8 +218,9 @@ jobs:
             -DEXIV2_ENABLE_CURL=ON \
             -DEXIV2_ENABLE_BMFF=ON \
             -DEXIV2_BUILD_UNIT_TESTS=OFF \
+            -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
             -S . -B build && \
-          cmake --build build --parallel
+          cmake --build build --parallel --verbose=1
 
       - name: Test
         run: |
