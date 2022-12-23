@@ -218,9 +218,8 @@ jobs:
             -DEXIV2_ENABLE_CURL=ON \
             -DEXIV2_ENABLE_BMFF=ON \
             -DEXIV2_BUILD_UNIT_TESTS=OFF \
-            -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
             -S . -B build && \
-          cmake --build build --parallel --verbose=1
+          cmake --build build --parallel --verbose
 
       - name: Test
         run: |
