@@ -202,7 +202,7 @@ jobs:
           git checkout r56 && \
           meson --buildtype=plain builddir && \
           meson compile -vC builddir && \
-          meson install -vC builddir && \
+          meson install -v builddir && \
           env && \
           echo $CC
 
