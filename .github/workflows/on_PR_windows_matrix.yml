@@ -201,8 +201,8 @@ jobs:
           cd inih_build && \
           git checkout r56 && \
           meson --buildtype=plain builddir && \
-          meson compile -C builddir && \
-          meson install -C builddir && \
+          meson compile -vC builddir && \
+          meson install -vC builddir && \
           env && \
           echo $CC
 
