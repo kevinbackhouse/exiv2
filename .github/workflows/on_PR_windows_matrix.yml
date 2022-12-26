@@ -203,7 +203,8 @@ jobs:
           meson compile -vC builddir && \
           meson install -C builddir && \
           cd .. && \
-          rm -rf inih_build
+          rm -rf inih_build && \
+          git status
 
       - name: Build
         run: |
@@ -218,7 +219,8 @@ jobs:
             -DEXIV2_ENABLE_BMFF=ON \
             -DEXIV2_BUILD_UNIT_TESTS=OFF \
             -S . -B build && \
-          cmake --build build --parallel --verbose
+          cmake --build build --parallel --verbose && \
+          ctest --test-dir build --output-on-failure
 
       - name: Test
         run: |
