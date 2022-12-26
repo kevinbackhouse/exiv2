@@ -167,7 +167,7 @@ jobs:
       SHELLOPTS: igncr
     defaults:
       run:
-        shell: C:\cygwin64\bin\bash.exe -eo pipefail '{0}'
+        shell: C:\cygwin\bin\bash.exe -eo pipefail '{0}'
     steps:
       # Make sure we don't check out scripts using Windows CRLF line endings
       - run: git config --global core.autocrlf input
@@ -202,8 +202,8 @@ jobs:
           meson --buildtype=plain builddir && \
           meson compile -vC builddir && \
           meson install -C builddir && \
-          env && \
-          echo $CC
+          cd .. && \
+          rm -rf inih_build
 
       - name: Build
         run: |
@@ -222,10 +222,4 @@ jobs:
 
       - name: Test
         run: |
-          pwd && \
-          ls -l && \
-          ls -l test/data && \
-          cd build && \
-          ./bin/exiv2 ../test/data/Stonehenge.exv && \
-          cd .. && \
           ctest --test-dir build --output-on-failure
