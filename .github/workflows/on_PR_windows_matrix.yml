@@ -222,6 +222,7 @@ jobs:
           cmake --build build --parallel --verbose && \
           cd build && \
           ls -l bin && \
+          env && \
           ./bin/exiv2.exe
 
       - name: Test
