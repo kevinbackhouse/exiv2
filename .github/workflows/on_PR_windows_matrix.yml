@@ -223,8 +223,8 @@ jobs:
           cd build && \
           ls -l bin && \
           env && \
-          ./bin/exiv2.exe
+          PATH="/usr/local/bin:$PATH" ./bin/exiv2.exe
 
       - name: Test
         run: |
-          ctest --test-dir build --output-on-failure
+          PATH="/usr/local/bin:$PATH" ctest --test-dir build --output-on-failure
