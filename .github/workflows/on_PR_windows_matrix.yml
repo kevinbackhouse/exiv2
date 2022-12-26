@@ -161,13 +161,13 @@ jobs:
       matrix:
         build_type: [Release]
         shared_libraries: [ON]
-        platform: [x64]
+        platform: [x86_64]
     name: Cygwin ${{matrix.platform}} - BuildType:${{matrix.build_type}} - SHARED:${{matrix.shared_libraries}}
     env:
       SHELLOPTS: igncr
     defaults:
       run:
-        shell: C:\cygwin\bin\bash.exe -eo pipefail '{0}'
+        shell: C:\cygwin64\bin\bash.exe -eo pipefail '{0}'
     steps:
       # Make sure we don't check out scripts using Windows CRLF line endings
       - run: git config --global core.autocrlf input
