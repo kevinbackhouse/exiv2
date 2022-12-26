@@ -196,9 +196,6 @@ jobs:
 
       - name: Build and install inih
         run: |
-          export CCACHE_DISABLE=1 && \
-          export CC=/usr/bin/cc && \
-          export CXX=/usr/bin/c++ && \
           git clone https://github.com/benhoyt/inih.git inih_build && \
           cd inih_build && \
           git checkout r56 && \
@@ -229,6 +226,6 @@ jobs:
           ls -l && \
           ls -l test/data && \
           cd build && \
-          ./bin/exiv2 ../test/data/Stonehenge.exv && \
+          strace ./bin/exiv2 ../test/data/Stonehenge.exv && \
           cd .. && \
           ctest --test-dir build --output-on-failure
