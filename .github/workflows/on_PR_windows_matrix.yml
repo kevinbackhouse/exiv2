@@ -226,6 +226,6 @@ jobs:
           ls -l && \
           ls -l test/data && \
           cd build && \
-          strace ./bin/exiv2 ../test/data/Stonehenge.exv && \
+          ./bin/exiv2 ../test/data/Stonehenge.exv && \
           cd .. && \
           ctest --test-dir build --output-on-failure
