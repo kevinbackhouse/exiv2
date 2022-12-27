@@ -200,7 +200,7 @@ jobs:
           cd inih_build && \
           git checkout r56 && \
           meson --buildtype=plain --prefix=/usr builddir && \
-          meson compile -vC builddir && \
+          meson compile -C builddir && \
           meson install -C builddir
 
       - name: Build
@@ -216,7 +216,7 @@ jobs:
             -DEXIV2_ENABLE_BMFF=ON \
             -DEXIV2_BUILD_UNIT_TESTS=OFF \
             -S . -B build && \
-          cmake --build build --parallel --verbose
+          cmake --build build --parallel
 
       - name: Test
         run: |
