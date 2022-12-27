@@ -199,12 +199,9 @@ jobs:
           git clone https://github.com/benhoyt/inih.git inih_build && \
           cd inih_build && \
           git checkout r56 && \
-          meson --buildtype=plain builddir && \
+          meson --buildtype=plain --prefix=/usr builddir && \
           meson compile -vC builddir && \
-          meson install -C builddir && \
-          cd .. && \
-          rm -rf inih_build && \
-          git status
+          meson install -C builddir
 
       - name: Build
         run: |
@@ -223,4 +220,4 @@ jobs:
 
       - name: Test
         run: |
-          PATH="/usr/local/bin:$PATH" ctest --test-dir build --output-on-failure
+          ctest --test-dir build --output-on-failure
