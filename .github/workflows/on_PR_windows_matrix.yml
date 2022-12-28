@@ -130,7 +130,7 @@ jobs:
             brotli:p
             curl:p
             meson:p
-            libinih-devel:p
+            libinih:p
 
       - name: Build
         run: |
