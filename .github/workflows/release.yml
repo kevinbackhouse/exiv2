@@ -24,6 +24,8 @@ jobs:
         runner:
           - { os: ubuntu-22.04, arch: x64   }
           - { os: ubuntu-22.04-arm, arch: arm64 }
+    permissions:
+      id-token: write  # For sigstore
     steps:
       - uses: actions/checkout@v6
         with:
