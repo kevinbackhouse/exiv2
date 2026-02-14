@@ -60,7 +60,7 @@ jobs:
         uses: sigstore/gh-action-sigstore-python@a5caf349bc536fbef3668a10ed7f5cd309a4b53d # v3.2.0
         with:
           inputs: >-
-            ./exiv2-*/exiv2-*
+            ./build/exiv2-*.tar.gz
 
       - name: List files after
         run: tree -L 3
