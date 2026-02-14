@@ -55,17 +55,11 @@ jobs:
           cmake --build build -t doc
           cmake --build build -t package
 
-      - name: List files before
-        run: tree -L 3
-
       - name: Sign with sigstore
         uses: sigstore/gh-action-sigstore-python@a5caf349bc536fbef3668a10ed7f5cd309a4b53d # v3.2.0
         with:
           inputs: >-
             ./build/exiv2-*.tar.gz
-
-      - name: List files after
-        run: tree -L 3
 
       - uses: actions/upload-artifact@v6
         with:
@@ -107,17 +101,11 @@ jobs:
           cmake --build build -t doc
           cmake --build build -t package
 
-      - name: List files before
-        run: tree -L 3
-
       - name: Sign with sigstore
         uses: sigstore/gh-action-sigstore-python@a5caf349bc536fbef3668a10ed7f5cd309a4b53d # v3.2.0
         with:
           inputs: >-
             ./build/exiv2-*.tar.gz
-
-      - name: List files after
-        run: tree -L 3
 
       - uses: actions/upload-artifact@v6
         with:
@@ -177,17 +165,11 @@ jobs:
           cmake --build build --parallel -t doc
           cmake --build build --parallel -t package
 
-      - name: List files before
-        run: tree -L 3
-
       - name: Sign with sigstore
         uses: sigstore/gh-action-sigstore-python@a5caf349bc536fbef3668a10ed7f5cd309a4b53d # v3.2.0
         with:
           inputs: >-
             ./build/exiv2-*.zip
-
-      - name: List files after
-        run: tree -L 3
 
       - uses: actions/upload-artifact@v6
         with:
