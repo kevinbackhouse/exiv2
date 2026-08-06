@@ -1722,4 +1722,7 @@ size_t curlWriter(char* data, size_t size, size_t nmemb, std::string* writerData
   return size * nmemb;
 }
 #endif
+
+RefIo::RefIo(BasicIo& io) : io_(io) {}
+
 }  // namespace Exiv2

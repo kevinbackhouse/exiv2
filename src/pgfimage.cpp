@@ -64,6 +64,37 @@ PgfImage::PgfImage(BasicIo::UniquePtr io, const ImageCtorParams& params) :
   }
 }  // PgfImage::PgfImage
 
+class EXIV2API RefIo : public BasicIo {
+ public:
+  explicit RefIo(BasicIo& io) : io_(io) {}
+  ~RefIo() override {}
+
+  int open() override { return 0; }
+  int close() override { return 0; }
+  size_t write(const byte* data, size_t wcount) override { return io_.write(data, wcount); }
+  size_t write(BasicIo& src) override { return io_.write(src); }
+
+  int putb(byte data) override { return io_.putb(data); }
+  DataBuf read(size_t rcount) override { return io_.read(rcount); }
+  size_t read(byte* buf, size_t rcount) override { return io_.read(buf, rcount); }
+  int getb() override { return io_.getb(); }
+  void transfer(BasicIo& src) override { io_.transfer(src); }
+
+  int seek(int64_t offset, Position pos) override;
+  byte* mmap(bool /*isWriteable*/ = false) override;
+  int munmap() override;
+  [[nodiscard]] size_t tell() const override;
+  [[nodiscard]] size_t size() const override;
+  [[nodiscard]] bool isopen() const override;
+  [[nodiscard]] int error() const override;
+  [[nodiscard]] bool eof() const override;
+  [[nodiscard]] const std::string& path() const noexcept override;
+  void populateFakeData() override;
+
+ protected:
+   BasioIo& io_;
+};
+
 void PgfImage::readMetadata() {
 #ifdef EXIV2_DEBUG_MESSAGES
   std::cerr << "Exiv2::PgfImage::readMetadata: Reading PGF file " << io_->path() << "\n";

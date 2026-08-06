@@ -930,6 +930,7 @@ class EXIV2API CurlIo : public RemoteIo {
 };
 #endif
 
+
 // *****************************************************************************
 // template, inline and free functions
 
