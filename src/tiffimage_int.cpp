@@ -347,7 +347,9 @@ constexpr ArrayCfg nikonAfCfg = {
 };
 //! Nikon Auto Focus binary array - definition
 constexpr ArrayDef nikonAfDef[] = {
-    {0, ttUnsignedByte, 1}, {1, ttUnsignedByte, 1}, {2, ttUnsignedShort, 1},  // The array contains 4 bytes
+    {0, ttUnsignedByte, 1},
+    {1, ttUnsignedByte, 1},
+    {2, ttUnsignedShort, 1},  // The array contains 4 bytes
 };
 
 //! Nikon Auto Focus 21 binary array - configuration

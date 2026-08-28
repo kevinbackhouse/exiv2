@@ -231,7 +231,7 @@ void PsdImage::readResourceBlock(uint16_t resourceId, uint32_t resourceSize) {
       io_->read(rawExif.data(), rawExif.size());
       if (io_->error() || io_->eof())
         throw Error(ErrorCode::kerFailedToReadImageData);
-      const DecodeParams dp(max_recursion_depth_);
+      const DecodeParams dp(recursion_limit());
       ByteOrder bo = ExifParser::decode(exifData_, rawExif.c_data(), rawExif.size(), dp);
       setByteOrder(bo);
       if (!rawExif.empty() && byteOrder() == invalidByteOrder) {
@@ -249,7 +249,7 @@ void PsdImage::readResourceBlock(uint16_t resourceId, uint32_t resourceSize) {
       if (io_->error() || io_->eof())
         throw Error(ErrorCode::kerFailedToReadImageData);
       xmpPacket_.assign(xmpPacket.c_str(), xmpPacket.size());
-      const DecodeParams dp(max_recursion_depth_);
+      const DecodeParams dp(recursion_limit());
       if (!xmpPacket_.empty() && XmpParser::decode(xmpData_, xmpPacket_, dp)) {
 #ifndef SUPPRESS_WARNINGS
         EXV_WARNING << "Failed to decode XMP metadata.\n";
@@ -532,7 +532,7 @@ void PsdImage::doWriteMetadata(BasicIo& outIo) {
   if (outIo.error())
     throw Error(ErrorCode::kerImageWriteFailed);
 
-    // Update length of resources
+  // Update length of resources
 #ifdef EXIV2_DEBUG_MESSAGES
   std::cerr << "newResLength: " << newResLength << "\n";
 #endif
