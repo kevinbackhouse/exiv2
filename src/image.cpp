@@ -145,6 +145,10 @@ ImageCtorParams ImageCtorParams::withCreate(bool create) const {
   return ImageCtorParams(create, useCurl_, max_recursion_depth_);
 }
 
+ImageCtorParams ImageCtorParams::defaultSettings() {
+  return Exiv2::ImageCtorParams(false, true, Exiv2::RecursionLimit(1000));
+}
+
 Image::Image(ImageType type, uint16_t supportedMetadata, BasicIo::UniquePtr io, const ImageCtorParams& params) :
     io_(std::move(io)),
     recursion_limit_(params.max_recursion_depth()),

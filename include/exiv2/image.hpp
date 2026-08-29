@@ -67,6 +67,9 @@ class EXIV2API ImageCtorParams {
   //! for the create field.
   ImageCtorParams withCreate(bool create) const;
 
+  // Default settings, useful for things like the applications in the samples directory.
+  static ImageCtorParams defaultSettings();
+
  private:
   const bool create_;
   const bool useCurl_;
@@ -591,9 +594,11 @@ class EXIV2API ImageFactory {
     @throw Error If opening the file fails or it contains data of an
         unknown image type.
    */
-  static Image::UniquePtr open(const std::string& path, const ImageCtorParams& params);
+  static Image::UniquePtr open(const std::string& path,
+                               const ImageCtorParams& params = ImageCtorParams::defaultSettings());
 #ifdef _WIN32
-  static Image::UniquePtr open(const std::wstring& path);
+  static Image::UniquePtr open(const std::wstring& path,
+                               const ImageCtorParams& params = ImageCtorParams::defaultSettings());
 #endif
   /*!
     @brief Create an Image subclass of the appropriate type by reading
@@ -606,7 +611,8 @@ class EXIV2API ImageFactory {
         matches that of the data buffer.
     @throw Error If the memory contains data of an unknown image type.
    */
-  static Image::UniquePtr open(const byte* data, size_t size, const ImageCtorParams& params);
+  static Image::UniquePtr open(const byte* data, size_t size,
+                               const ImageCtorParams& params = ImageCtorParams::defaultSettings());
   /*!
     @brief Create an Image subclass of the appropriate type by reading
         the provided BasicIo instance. %Image type is derived from the
@@ -624,7 +630,8 @@ class EXIV2API ImageFactory {
         determined, the pointer is 0.
     @throw Error If opening the BasicIo fails
    */
-  static Image::UniquePtr open(std::unique_ptr<BasicIo> io, const ImageCtorParams& params);
+  static Image::UniquePtr open(std::unique_ptr<BasicIo> io,
+                               const ImageCtorParams& params = ImageCtorParams::defaultSettings());
   /*!
     @brief Create an Image subclass of the requested type by creating a
         new image file. If the file already exists, it will be overwritten.
@@ -634,7 +641,8 @@ class EXIV2API ImageFactory {
         type.
     @throw Error If the image type is not supported.
    */
-  static Image::UniquePtr create(ImageType type, const std::string& path, const ImageCtorParams& params);
+  static Image::UniquePtr create(ImageType type, const std::string& path,
+                                 const ImageCtorParams& params = ImageCtorParams::defaultSettings());
   /*!
     @brief Create an Image subclass of the requested type by creating a
         new image in memory.
@@ -643,7 +651,7 @@ class EXIV2API ImageFactory {
         type.
     @throw Error If the image type is not supported
    */
-  static Image::UniquePtr create(ImageType type, const ImageCtorParams& params);
+  static Image::UniquePtr create(ImageType type, const ImageCtorParams& params = ImageCtorParams::defaultSettings());
 
   /*!
     @brief Create an Image subclass of the requested type by writing a
@@ -660,7 +668,8 @@ class EXIV2API ImageFactory {
         type. If the image type is not supported, the pointer is 0.
    */
 
-  static Image::UniquePtr create(ImageType type, std::unique_ptr<BasicIo> io, const ImageCtorParams& params);
+  static Image::UniquePtr create(ImageType type, std::unique_ptr<BasicIo> io,
+                                 const ImageCtorParams& params = ImageCtorParams::defaultSettings());
   /*!
     @brief Returns the image type of the provided file.
     @param path %Image file. The contents of the file are tested to
