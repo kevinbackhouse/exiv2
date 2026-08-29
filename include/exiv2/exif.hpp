@@ -16,7 +16,7 @@
 // included header files
 #include "config.h"
 #include "metadatum.hpp"
-#include "params.hpp"
+#include "decode_params.hpp"
 
 // + standard includes
 #include <list>

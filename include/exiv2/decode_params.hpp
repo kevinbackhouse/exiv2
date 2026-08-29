@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef EXIV2_PARAMS_HPP
-#define EXIV2_PARAMS_HPP
+#ifndef EXIV2_DECODE_PARAMS_HPP
+#define EXIV2_DECODE_PARAMS_HPP
 
 // *****************************************************************************
 #include "exiv2lib_export.h"
@@ -33,4 +33,4 @@ class EXIV2API DecodeParams {
 
 }  // namespace Exiv2
 
-#endif  // EXIV2_PARAMS_HPP
+#endif  // EXIV2_DECODE_PARAMS_HPP

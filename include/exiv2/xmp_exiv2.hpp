@@ -9,7 +9,7 @@
 // included header files
 #include "datasets.hpp"
 #include "metadatum.hpp"
-#include "params.hpp"
+#include "decode_params.hpp"
 #include "properties.hpp"
 
 #include <atomic>
