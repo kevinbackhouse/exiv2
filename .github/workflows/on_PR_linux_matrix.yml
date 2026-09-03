@@ -32,7 +32,7 @@ jobs:
 
       - name: Conan common config
         run: |
-          conan profile new --detect default
+          conan profile detect --name default --force
 
       - name: Run Conan
         run: |
