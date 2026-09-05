@@ -1,3 +1,9 @@
+# First check if inih was already provided by Conan.
+find_package(inih CONFIG QUIET)
+if(inih_FOUND)
+  return()
+endif()
+
 set(inih_LIBRARY_NAMES "inih" "libinih")
 set(inih_inireader_LIBRARY_NAMES "INIReader" "libINIReader")
 
