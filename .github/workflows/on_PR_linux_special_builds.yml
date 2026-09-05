@@ -34,7 +34,7 @@ jobs:
       - name: Run Conan
         run: |
           mkdir build
-          conan install . -o webready=True --build missing --output-folder=build
+          conan install . -o webready=True --build missing --output-folder=build -s compiler.cppstd=20
 
       - name: Build
         run: |
@@ -79,7 +79,7 @@ jobs:
       - name: Run Conan
         run: |
           mkdir build
-          conan install . -o webready=True --build missing --output-folder=build
+          conan install . -o webready=True --build missing --output-folder=build -s compiler.cppstd=20
 
       - name: Build
         run: |
@@ -118,7 +118,7 @@ jobs:
       - name: Run Conan
         run: |
           mkdir build
-          conan install . -o webready=True --build missing --output-folder=build
+          conan install . -o webready=True --build missing --output-folder=build -s compiler.cppstd=20
 
       - name: Build
         run: |
@@ -171,7 +171,7 @@ jobs:
       - name: Run Conan
         run: |
           mkdir build
-          conan install . -o webready=True --build missing --output-folder=build
+          conan install . -o webready=True --build missing --output-folder=build -s compiler.cppstd=20
 
       - name: Build
         env:
