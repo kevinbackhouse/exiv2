@@ -19,6 +19,13 @@
 # KIND, either express or implied.
 #
 ###########################################################################
+
+# First check if brotli was already provided by Conan.
+find_package(brotli CONFIG QUIET)
+if(brotli_FOUND)
+  return()
+endif()
+
 include(FindPackageHandleStandardArgs)
 
 find_path(BROTLI_INCLUDE_DIR "brotli/decode.h")
