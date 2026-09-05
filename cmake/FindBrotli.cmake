@@ -23,6 +23,7 @@
 # First check if brotli was already provided by Conan.
 find_package(brotli CONFIG QUIET)
 if(brotli_FOUND)
+  set(BROTLI_FOUND TRUE)
   return()
 endif()
 
