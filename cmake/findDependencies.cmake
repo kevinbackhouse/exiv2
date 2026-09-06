@@ -17,16 +17,9 @@ if (CONAN_AUTO_INSTALL)
                         SETTINGS ${settings})
 endif()
 
-if (APPLE)
-    # On Apple, we use the conan cmake_paths generator
-    if (EXISTS ${CMAKE_BINARY_DIR}/conan_paths.cmake)
-        include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
-    endif()
-else()
-    # Otherwise, we rely on the conan cmake_find_package generator
-    list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
-endif()
+# Otherwise, we rely on the conan cmake_find_package generator
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
@@ -47,7 +40,7 @@ if( EXIV2_ENABLE_PNG )
 endif( )
 
 if( EXIV2_ENABLE_BMFF AND EXIV2_ENABLE_BROTLI )
-    find_package( Brotli REQUIRED )
+    find_package( brotli REQUIRED )
 endif( )
 
 if( EXIV2_ENABLE_WEBREADY )

@@ -2,6 +2,12 @@ include(CheckIncludeFileCXX)
 include(CheckCXXSourceCompiles)
 include(CheckCXXSymbolExists)
 
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
 # Note that the scope of the EXV_ variables in local
 if (${EXIV2_ENABLE_WEBREADY})
     set(EXV_USE_CURL  ${EXIV2_ENABLE_CURL})
@@ -22,7 +28,9 @@ else()
 endif()
 set(EXV_HAVE_ICONV       ${ICONV_FOUND})
 set(EXV_HAVE_LIBZ        ${ZLIB_FOUND})
-set(EXV_HAVE_BROTLI      ${BROTLI_FOUND})
+set(EXV_HAVE_BROTLI      ${brotli_FOUND})
+
+message("EXV_HAVE_BROTLI: " ${EXV_HAVE_BROTLI})
 
 check_cxx_source_compiles("#include <format>\nint main(){std::format(\"t\");}" EXV_HAVE_STD_FORMAT)
 check_cxx_symbol_exists(strerror_r  string.h       EXV_HAVE_STRERROR_R )
