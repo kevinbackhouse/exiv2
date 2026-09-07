@@ -22,6 +22,7 @@ jobs:
 
     env:
       CONAN_HOME: ${{github.workspace}}/conanCache
+      VERBOSE: 1
 
     strategy:
       fail-fast: false
