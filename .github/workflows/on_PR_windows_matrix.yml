@@ -40,12 +40,12 @@ jobs:
         with:
           arch: ${{matrix.platform}}
 
-      - name: Restore Conan cache
-        uses: actions/cache@v6
-        with:
-            path: $CONAN_HOME
-            key: ${{runner.os}}-${{matrix.platform}}-${{matrix.build_type}}-Shared${{matrix.shared_libraries}}-${{ hashFiles('conanfile.py') }}
-            lookup-only: true
+#      - name: Restore Conan cache
+#        uses: actions/cache@v6
+#        with:
+#            path: $CONAN_HOME
+#            key: ${{runner.os}}-${{matrix.platform}}-${{matrix.build_type}}-Shared${{matrix.shared_libraries}}-${{ hashFiles('conanfile.py') }}
+#            lookup-only: true
 
       - name: Install Conan & common config
         run: |
