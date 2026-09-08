@@ -41,12 +41,12 @@ jobs:
         with:
           arch: ${{matrix.platform}}
 
-#      - name: Restore Conan cache
-#        uses: actions/cache@v6
-#        with:
-#            path: $CONAN_HOME
-#            key: ${{runner.os}}-${{matrix.platform}}-${{matrix.build_type}}-Shared${{matrix.shared_libraries}}-${{ hashFiles('conanfile.py') }}
-#            lookup-only: true
+      - name: Restore Conan cache
+        uses: actions/cache@v6
+        with:
+            path: $CONAN_HOME
+            key: ${{runner.os}}-${{matrix.platform}}-${{matrix.build_type}}-Shared${{matrix.shared_libraries}}-${{ hashFiles('conanfile.py') }}
+            lookup-only: true
 
       - name: Install Conan & common config
         run: |
@@ -70,7 +70,7 @@ jobs:
       - name: Test
         shell: cmd
         run: |
-          call build\conanrun.bat
+#          call build\conanrun.bat
           ctest --test-dir build --output-on-failure
 
   msys2:

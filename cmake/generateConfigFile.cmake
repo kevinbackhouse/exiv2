@@ -2,12 +2,6 @@ include(CheckIncludeFileCXX)
 include(CheckCXXSourceCompiles)
 include(CheckCXXSymbolExists)
 
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
 # Note that the scope of the EXV_ variables in local
 if (${EXIV2_ENABLE_WEBREADY})
     set(EXV_USE_CURL  ${EXIV2_ENABLE_CURL})
