@@ -2,7 +2,7 @@ from conan import ConanFile
 
 class Exiv2Conan(ConanFile):
     settings = 'os', 'compiler', 'build_type', 'arch'
-    generators = 'CMakeDeps'
+    generators = 'CMakeDeps', 'VirtualRunEnv'
     options = {'unitTests': [True, False],
                'xmp': [True, False],
                'iconv': [True, False],
@@ -40,7 +40,3 @@ class Exiv2Conan(ConanFile):
             self.requires('XmpSdk/2016.7@piponazo/stable') # from conan-piponazo
         else:
             self.requires('expat/2.6.3')
-
-    def imports(self):
-        self.copy('*.dll', dst='bin', src='bin')
-        self.copy('*.dylib', dst='bin', src='lib')

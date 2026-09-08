@@ -65,6 +65,7 @@ jobs:
 
       - name: Install
         run: |
+          call build\conanrun.bat
           cmake --install build
 
       - name: Test
