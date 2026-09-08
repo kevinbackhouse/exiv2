@@ -70,6 +70,7 @@ jobs:
       - name: Test
         shell: cmd
         run: |
+          ${{ case(matrix.platform == 'x86', 'call build\conanrun.bat', '') }}
           ctest --test-dir build --output-on-failure
 
   msys2:
