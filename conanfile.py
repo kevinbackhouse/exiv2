@@ -2,7 +2,7 @@ from conan import ConanFile
 
 class Exiv2Conan(ConanFile):
     settings = 'os', 'compiler', 'build_type', 'arch'
-    generators = 'CMakeDeps', 'CMakeToolchain'
+    generators = 'CMakeDeps'
     options = {'unitTests': [True, False],
                'xmp': [True, False],
                'iconv': [True, False],
