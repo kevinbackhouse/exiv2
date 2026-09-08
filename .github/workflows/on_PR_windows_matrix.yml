@@ -70,7 +70,6 @@ jobs:
       - name: Test
         shell: cmd
         run: |
-#          call build\conanrun.bat
           ctest --test-dir build --output-on-failure
 
   msys2:
