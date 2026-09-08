@@ -65,11 +65,11 @@ jobs:
 
       - name: Install
         run: |
-          call build\conanrun.bat
           cmake --install build
 
       - name: Test
         run: |
+          call build\conanrun.bat
           ctest --test-dir build --output-on-failure
 
   msys2:
